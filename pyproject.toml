@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aacp"
+version = "0.1.0"
+description = "Adaptive Algorithm Selection via Learned Complexity Prediction (Minimum Vertex Cover case study)"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "networkx", "pandas", "scikit-learn", "matplotlib", "tabulate"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["aacp", "aacp.algorithms"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
