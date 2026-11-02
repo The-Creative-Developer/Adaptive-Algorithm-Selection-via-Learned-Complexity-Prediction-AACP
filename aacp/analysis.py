@@ -95,6 +95,11 @@ def analyse(datadir="data", outdir="reports") -> dict:
         "spearman_time_vs_width": rho_w, "spearman_time_vs_n": rho_n,
         "spearman_time_vs_m": rho_m,
         "tw_feature_vs_width_spearman": _spearman(D["tw_ub"].values, D["width"].values)[0],
+        # Cheeger link: small spectral gap <=> sparse cuts <=> small separators / treewidth
+        "spearman_lap_gap_vs_tw_ratio": _spearman(D["lap_gap"].values, D["tw_ratio"].values)[0],
+        "spearman_lap_gap_vs_dp_solved": _spearman(D["lap_gap"].values, D["ok"].astype(float).values)[0],
+        "dp_solved_frac_lap_gap_le_0.154": float(D[D.lap_gap <= 0.154].ok.mean()),
+        "dp_solved_frac_lap_gap_gt_0.154": float(D[D.lap_gap > 0.154].ok.mean()),
     }
     fig, ax = plt.subplots(1, 2, figsize=(11, 4))
     _scatter(ax[0], Dok, "width", "time", logy=True)
@@ -175,6 +180,12 @@ def analyse(datadir="data", outdir="reports") -> dict:
     cl_bins = pd.cut(nontrap["clustering"], [-0.01, 0.05, 0.2, 0.4, 0.6, 1.0])
     by_cl = nontrap.groupby(cl_bins, observed=True)["ratio"].agg(["mean", "max", "count"])
     by_cl["p_subopt"] = nontrap.groupby(cl_bins, observed=True)["subopt"].mean()
+    as_bins = pd.cut(nontrap["assortativity"], [-1.01, -0.3, -0.15, 0.0, 0.15, 1.0])
+    by_as = nontrap.groupby(as_bins, observed=True)["ratio"].agg(["mean", "max", "count"])
+    by_as["p_subopt"] = nontrap.groupby(as_bins, observed=True)["subopt"].mean()
+    cv_bins = pd.cut(nontrap["deg_cv"], [-0.01, 0.2, 0.4, 0.7, 1.0, 10])
+    by_cv = nontrap.groupby(cv_bins, observed=True)["ratio"].agg(["mean", "max", "count"])
+    by_cv["p_subopt"] = nontrap.groupby(cv_bins, observed=True)["subopt"].mean()
     T = G[G.family == "trap"].copy()
     T["k"] = T["params"].map(lambda s: json.loads(s)["k"])
     T["noise"] = T["params"].map(lambda s: json.loads(s)["noise"])
@@ -187,6 +198,8 @@ def analyse(datadir="data", outdir="reports") -> dict:
         "spearman_ratio_vs_feature_nontrap": corr,
         "stump_rules": export_text(stump, feature_names=feats, decimals=3),
         "by_clustering": by_cl.round(4).reset_index().astype(str).to_dict("records"),
+        "by_assortativity": by_as.round(4).reset_index().astype(str).to_dict("records"),
+        "by_deg_cv": by_cv.round(4).reset_index().astype(str).to_dict("records"),
         "trap_ratio_by_k_noise": trap_tab.round(3).to_dict(),
         "trap_H_k_minus_1": {int(k): round(harmonic(k) - 1, 3) for k in sorted(T["k"].unique())},
     }
@@ -270,10 +283,10 @@ def selection_report(datadir="data", outdir="reports") -> dict:
     data = S.load(datadir)
     res = S.evaluate_all(data)
     out = {"results": res}
-    out["label_dist"] = {t: S.labels(data.cost[t], data.times).value_counts().to_dict()
-                         for t in S.TASKS}
+    lab = {t: S.labels(data.cost[t], data.times, S.penalty_of(t, data)) for t in S.TASKS}
+    out["label_dist"] = {t: lab[t].value_counts().to_dict() for t in S.TASKS}
     out["label_by_family"] = {t: pd.crosstab(data.inst.loc[data.cost[t].index, "family"],
-                                             S.labels(data.cost[t], data.times)).reindex(FAM_ORDER)
+                                             lab[t]).reindex(FAM_ORDER)
                               for t in S.TASKS}
     out["trees"] = {}
     out["cost_trees"] = {}
@@ -339,9 +352,14 @@ def write_report(datadir="data", outdir="reports") -> Path:
           "`figures/C_ilp_gap.png`, `figures/D_greedy.png`, `figures/E_two_approx.png`", "",
           "## 3. Algorithm selection", ""]
     res = se["results"].copy()
-    L += ["![gap closed](figures/selection_gap_closed.png)", "","Gap closed = (SBS - AS) / (SBS - VBS); 1 = oracle, 0 = no better than always "
-          "running the single best solver. Costs are mean PAR10 seconds (certified / optimum) "
-          "or mean approximation ratio (approx).", "", res.to_markdown(index=False, floatfmt=".4f"), ""]
+    L += ["![gap closed](figures/selection_gap_closed.png)", "",
+          "Gap closed = (SBS - AS) / (SBS - VBS); 1 = oracle, 0 = no better than always "
+          "running the single best solver (NaN when VBS is within 0.1% of SBS, i.e. there is "
+          "no selection problem). Accuracy is measured on instances where some algorithm "
+          "succeeds. Costs are mean PAR10 seconds (certified / optimum), mean |C|/OPT with a "
+          f"penalty of {S.BUDGET_PENALTY} for missing the {S.TAU * 1000:.0f} ms budget "
+          "(budgeted), or mean approximation ratio (approx). AS_feat adds feature time.",
+          "", res.to_markdown(index=False, floatfmt=".4f"), ""]
     for t in S.TASKS:
         L += [f"### Task `{t}`", "", f"Label distribution: `{se['label_dist'][t]}`", "",
               "Oracle label by family:", "", se["label_by_family"][t].fillna(0).astype(int).to_markdown(), "",

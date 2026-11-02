@@ -86,14 +86,32 @@ def load(datadir) -> Data:
     return Data(inst=inst, cost=cost, budget=budget, times=times)
 
 
-def labels(C: pd.DataFrame, times: pd.DataFrame | None = None) -> pd.Series:
-    """Oracle label = argmin cost; exact ties (common for ratios) go to the faster one."""
+UNSOLVED = "unsolved"
+
+
+def labels(C: pd.DataFrame, times: pd.DataFrame | None = None,
+           penalty: float | None = None) -> pd.Series:
+    """Oracle label = argmin cost; exact ties (common for ratios) go to the faster one.
+    Rows where every algorithm pays ``penalty`` are labelled UNSOLVED: no choice
+    matters there, so they carry no training signal."""
     if times is None:
-        return C.idxmin(axis=1)
-    T = times.loc[C.index, C.columns]
-    best = C.min(axis=1)
-    tied = C.le(best + 1e-12, axis=0)
-    return T.where(tied).idxmin(axis=1)
+        y = C.idxmin(axis=1)
+    else:
+        T = times.loc[C.index, C.columns]
+        best = C.min(axis=1)
+        tied = C.le(best + 1e-12, axis=0)
+        y = T.where(tied).idxmin(axis=1)
+    if penalty is not None:
+        y = y.where(C.min(axis=1) < penalty - 1e-9, UNSOLVED)
+    return y
+
+
+def penalty_of(task: str, data: "Data") -> float | None:
+    if task in ("certified", "optimum"):
+        return 10 * data.budget
+    if task == "budgeted":
+        return BUDGET_PENALTY
+    return None
 
 
 def feature_matrix(inst: pd.DataFrame, featureset: str) -> pd.DataFrame:
@@ -123,7 +141,7 @@ def train_costs(C: pd.DataFrame, T: pd.DataFrame | None) -> pd.DataFrame:
     return C + 1e-4 * T.loc[C.index, C.columns].fillna(0)
 
 
-def _fit_predict(kind, Xtr, Ctr, Xte, seed=0, Ttr=None):
+def _fit_predict(kind, Xtr, Ctr, Xte, seed=0, Ttr=None, penalty=None):
     if kind in ("cost_tree", "cost_forest"):
         m = (CostSensitiveTree(max_depth=4, min_samples_leaf=5, random_state=seed)
              if kind == "cost_tree" else CostSensitiveForest(random_state=seed))
@@ -139,8 +157,9 @@ def _fit_predict(kind, Xtr, Ctr, Xte, seed=0, Ttr=None):
                                       random_state=seed, n_jobs=N_JOBS).fit(Xtr, y)
             preds[a] = r.predict(Xte)
         return pd.DataFrame(preds, index=Xte.index).idxmin(axis=1)
-    ytr = labels(Ctr, Ttr)
-    m = make_model(kind, seed).fit(Xtr, ytr)
+    ytr = labels(Ctr, Ttr, penalty)
+    keep = ytr != UNSOLVED
+    m = make_model(kind, seed).fit(Xtr[keep], ytr[keep])
     return pd.Series(m.predict(Xte), index=Xte.index)
 
 
@@ -157,7 +176,8 @@ def evaluate(data: Data, task: str, kind: str, featureset: str, protocol: str,
     C = data.cost[task]
     inst = data.inst.loc[C.index]
     X = feature_matrix(inst, featureset)
-    y = labels(C, data.times)
+    pen = penalty_of(task, data)
+    y = labels(C, data.times, pen)
     groups = inst["family"]
     chosen = pd.Series(index=C.index, dtype=object)
     sbs = pd.Series(index=C.index, dtype=object)
@@ -166,7 +186,7 @@ def evaluate(data: Data, task: str, kind: str, featureset: str, protocol: str,
         for tr, te in _splits(protocol, X, y, groups, seed):
             itr, ite = C.index[tr], C.index[te]
             chosen.loc[ite] = _fit_predict(kind, X.loc[itr], C.loc[itr], X.loc[ite], seed,
-                                           data.times).values
+                                           data.times, pen).values
             Ctr = C.loc[itr]
             s = (Ctr.replace(np.inf, 1e3).mean()).idxmin()
             sbs.loc[ite] = s
@@ -175,7 +195,9 @@ def evaluate(data: Data, task: str, kind: str, featureset: str, protocol: str,
     ftime = feature_time(inst, featureset).values
     res = {
         "task": task, "model": kind, "features": featureset, "protocol": protocol,
-        "n": len(C), "accuracy": float(np.mean(chosen.values == y.values)),
+        "n": len(C), "n_unsolved": int((y == UNSOLVED).sum()),
+        # accuracy over instances where the choice matters
+        "accuracy": float(np.mean((chosen.values == y.values)[y.values != UNSOLVED])),
     }
     if task in ("approx", "budgeted"):
         res.update(AS=float(np.mean(as_c)), SBS=float(np.mean(sbs_c)),
@@ -186,7 +208,9 @@ def evaluate(data: Data, task: str, kind: str, featureset: str, protocol: str,
                    SBS=float(np.mean(sbs_c)), VBS=float(np.mean(vbs_c)),
                    solved_AS=float(np.mean(as_c < P)), solved_SBS=float(np.mean(sbs_c < P)))
     denom = res["SBS"] - res["VBS"]
-    res["gap_closed"] = float((res["SBS"] - res["AS"]) / denom) if denom > 1e-9 else float("nan")
+    # no selection problem if the oracle barely beats the single best solver
+    res["gap_closed"] = (float((res["SBS"] - res["AS"]) / denom)
+                         if denom > 1e-3 * abs(res["VBS"]) else float("nan"))
     detail = pd.DataFrame({"label": y, "chosen": chosen, "sbs": sbs,
                            "cost_AS": as_c, "cost_SBS": sbs_c, "cost_VBS": vbs_c,
                            "family": groups})
@@ -209,7 +233,9 @@ def fit_interpretable(data: Data, task: str, featureset: str = "structural",
     """Accuracy-objective CART tree (for comparison with the cost tree)."""
     C = data.cost[task]
     X = feature_matrix(data.inst.loc[C.index], featureset)
-    y = labels(C, data.times)
+    y = labels(C, data.times, penalty_of(task, data))
+    keep = y != UNSOLVED
+    X, y = X[keep], y[keep]
     m = DecisionTreeClassifier(max_depth=depth, min_samples_leaf=5, random_state=0).fit(X, y)
     return m, X, y
 
@@ -227,7 +253,9 @@ def importances(data: Data, task: str, featureset: str = "all", seed: int = 0) -
     from sklearn.model_selection import train_test_split
     C = data.cost[task]
     X = feature_matrix(data.inst.loc[C.index], featureset)
-    y = labels(C, data.times)
+    y = labels(C, data.times, penalty_of(task, data))
+    keep = y != UNSOLVED
+    X, y = X[keep], y[keep]
     Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3, random_state=seed)
     m = make_model("forest", seed).fit(Xtr, ytr)
     pi = permutation_importance(m, Xte, yte, n_repeats=20, random_state=seed, n_jobs=N_JOBS)
