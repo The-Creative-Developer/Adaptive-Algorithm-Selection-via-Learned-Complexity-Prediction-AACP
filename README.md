@@ -35,10 +35,13 @@ implemented from scratch. Only the ILP/LP solves call a library (SciPy's HiGHS).
   Greedy is *best* at high clustering (mean ratio 1.008 when C > 0.6). It degrades on
   low-clustering, degree-homogeneous, assortative graphs. Its tight H(k) worst case
   (Johnson's trap, ratio 2.95 at k = 40) disappears after adding just 1–3% random edges.
-* **Training the selector on accuracy is the wrong objective.** A CART tree with 83%
-  label accuracy is *worse* than always running B&B. A regret-minimising decision tree
-  (new here; still a single readable tree) closes 80% of the gap to the oracle, and a
-  bagged version closes 93% (certified-optimum task, 5-fold CV).
+* **When errors are asymmetric, training the selector on accuracy is the wrong
+  objective.** In the "time-to-optimum" task, running greedy where it is suboptimal
+  costs 50 s while the reverse mistake costs 1 ms. There, an accuracy-trained CART tree
+  (77% accuracy) and random forest (86%) are *worse* than always running the single
+  best solver. A regret-minimising decision tree (new here; still a single readable
+  tree) closes 66% of the gap to the oracle, and a bagged version closes 99%. On the
+  certified-optimum task the regret tree closes 80% (accuracy-trained CART: 53%).
 * **Selection does not transfer to unseen graph families.** Under
   leave-one-family-out evaluation only the SATzilla-style runtime-regression model
   (EHM) still beats the single best solver.

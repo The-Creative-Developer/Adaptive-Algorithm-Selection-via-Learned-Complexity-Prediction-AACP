@@ -77,7 +77,11 @@ Regenerate with `python -m aacp analyze`. The interpretation lives in `REPORT.md
   "spearman_time_vs_width": 0.6326456227294665,
   "spearman_time_vs_n": 0.577400185021638,
   "spearman_time_vs_m": 0.8352119939848793,
-  "tw_feature_vs_width_spearman": 0.9866157067500523
+  "tw_feature_vs_width_spearman": 0.9866157067500523,
+  "spearman_lap_gap_vs_tw_ratio": 0.6286682263849143,
+  "spearman_lap_gap_vs_dp_solved": -0.3557938671347295,
+  "dp_solved_frac_lap_gap_le_0.154": 0.788546255506608,
+  "dp_solved_frac_lap_gap_gt_0.154": 0.498812351543943
 }
 ```
 
@@ -169,6 +173,80 @@ Regenerate with `python -m aacp analyze`. The interpretation lives in `REPORT.md
       "max": "1.0588",
       "count": "121",
       "p_subopt": "0.2727"
+    }
+  ],
+  "by_assortativity": [
+    {
+      "assortativity": "(-1.01, -0.3]",
+      "mean": "1.0021",
+      "max": "1.0476",
+      "count": "150",
+      "p_subopt": "0.0867"
+    },
+    {
+      "assortativity": "(-0.3, -0.15]",
+      "mean": "1.021",
+      "max": "1.0833",
+      "count": "105",
+      "p_subopt": "0.5429"
+    },
+    {
+      "assortativity": "(-0.15, 0.0]",
+      "mean": "1.0479",
+      "max": "1.4348",
+      "count": "198",
+      "p_subopt": "0.9091"
+    },
+    {
+      "assortativity": "(0.0, 0.15]",
+      "mean": "1.0501",
+      "max": "1.2338",
+      "count": "41",
+      "p_subopt": "0.9512"
+    },
+    {
+      "assortativity": "(0.15, 1.0]",
+      "mean": "1.0304",
+      "max": "1.0952",
+      "count": "38",
+      "p_subopt": "0.8421"
+    }
+  ],
+  "by_deg_cv": [
+    {
+      "deg_cv": "(-0.01, 0.2]",
+      "mean": "1.0441",
+      "max": "1.0909",
+      "count": "89",
+      "p_subopt": "0.9775"
+    },
+    {
+      "deg_cv": "(0.2, 0.4]",
+      "mean": "1.0533",
+      "max": "1.4348",
+      "count": "114",
+      "p_subopt": "0.9211"
+    },
+    {
+      "deg_cv": "(0.4, 0.7]",
+      "mean": "1.0273",
+      "max": "1.1786",
+      "count": "107",
+      "p_subopt": "0.5047"
+    },
+    {
+      "deg_cv": "(0.7, 1.0]",
+      "mean": "1.0172",
+      "max": "1.0795",
+      "count": "97",
+      "p_subopt": "0.5155"
+    },
+    {
+      "deg_cv": "(1.0, 10.0]",
+      "mean": "1.0049",
+      "max": "1.0588",
+      "count": "125",
+      "p_subopt": "0.2"
     }
   ],
   "trap_ratio_by_k_noise": {
@@ -276,108 +354,108 @@ Figures: `figures/A_td_dp_width.png`, `figures/B_bnb_nodes.png`, `figures/C_ilp_
 
 ![gap closed](figures/selection_gap_closed.png)
 
-Gap closed = (SBS - AS) / (SBS - VBS); 1 = oracle, 0 = no better than always running the single best solver. Costs are mean PAR10 seconds (certified / optimum) or mean approximation ratio (approx).
+Gap closed = (SBS - AS) / (SBS - VBS); 1 = oracle, 0 = no better than always running the single best solver (NaN when VBS is within 0.1% of SBS, i.e. there is no selection problem). Accuracy is measured on instances where some algorithm succeeds. Costs are mean PAR10 seconds (certified / optimum), mean |C|/OPT with a penalty of 3.0 for missing the 50 ms budget (budgeted), or mean approximation ratio (approx). AS_feat adds feature time.
 
-| task      | model       | features   | protocol   |   n |   accuracy |     AS |   AS_feat |    SBS |    VBS |   solved_AS |   solved_SBS |   gap_closed |
-|:----------|:------------|:-----------|:-----------|----:|-----------:|-------:|----------:|-------:|-------:|------------:|-------------:|-------------:|
-| certified | tree        | structural | cv         | 648 |     0.8256 | 4.1860 |    4.2095 | 3.9342 | 2.7760 |      0.9182 |       0.9244 |      -0.2174 |
-| certified | forest      | structural | cv         | 648 |     0.9090 | 2.9300 |    2.9535 | 3.9342 | 2.7760 |      0.9429 |       0.9244 |       0.8670 |
-| certified | cost_tree   | structural | cv         | 648 |     0.8164 | 3.0106 |    3.0341 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7974 |
-| certified | cost_forest | structural | cv         | 648 |     0.6914 | 2.8623 |    2.8858 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9255 |
-| certified | ehm         | structural | cv         | 648 |     0.8688 | 3.0107 |    3.0342 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7973 |
-| certified | tree        | all        | cv         | 648 |     0.8117 | 4.3827 |    4.4113 | 3.9342 | 2.7760 |      0.9136 |       0.9244 |      -0.3873 |
-| certified | forest      | all        | cv         | 648 |     0.9120 | 2.9248 |    2.9534 | 3.9342 | 2.7760 |      0.9429 |       0.9244 |       0.8715 |
-| certified | cost_tree   | all        | cv         | 648 |     0.8333 | 3.0105 |    3.0391 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7975 |
-| certified | cost_forest | all        | cv         | 648 |     0.6883 | 2.8618 |    2.8904 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9259 |
-| certified | ehm         | all        | cv         | 648 |     0.8565 | 2.8640 |    2.8926 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9240 |
-| certified | tree        | structural | lofo       | 648 |     0.7114 | 7.6425 |    7.6660 | 3.9342 | 2.7760 |      0.8488 |       0.9244 |      -3.2019 |
-| certified | forest      | structural | lofo       | 648 |     0.7423 | 6.3872 |    6.4107 | 3.9342 | 2.7760 |      0.8735 |       0.9244 |      -2.1180 |
-| certified | cost_tree   | structural | lofo       | 648 |     0.6883 | 5.0498 |    5.0733 | 3.9342 | 2.7760 |      0.9012 |       0.9244 |      -0.9633 |
-| certified | cost_forest | structural | lofo       | 648 |     0.5309 | 3.8972 |    3.9207 | 3.9342 | 2.7760 |      0.9244 |       0.9244 |       0.0319 |
-| certified | ehm         | structural | lofo       | 648 |     0.7654 | 3.4906 |    3.5141 | 3.9342 | 2.7760 |      0.9321 |       0.9244 |       0.3830 |
-| certified | tree        | all        | lofo       | 648 |     0.6991 | 7.6375 |    7.6661 | 3.9342 | 2.7760 |      0.8488 |       0.9244 |      -3.1975 |
-| certified | forest      | all        | lofo       | 648 |     0.7222 | 6.2336 |    6.2622 | 3.9342 | 2.7760 |      0.8765 |       0.9244 |      -1.9854 |
-| certified | cost_tree   | all        | lofo       | 648 |     0.7130 | 5.0485 |    5.0771 | 3.9342 | 2.7760 |      0.9012 |       0.9244 |      -0.9622 |
-| certified | cost_forest | all        | lofo       | 648 |     0.5988 | 3.9656 |    3.9942 | 3.9342 | 2.7760 |      0.9228 |       0.9244 |      -0.0271 |
-| certified | ehm         | all        | lofo       | 648 |     0.7670 | 3.3303 |    3.3589 | 3.9342 | 2.7760 |      0.9352 |       0.9244 |       0.5214 |
-| optimum   | tree        | structural | cv         | 628 |     0.6815 | 4.6927 |    4.7149 | 2.4671 | 1.2715 |      0.9076 |       0.9538 |      -1.8616 |
-| optimum   | forest      | structural | cv         | 628 |     0.8073 | 3.8094 |    3.8315 | 2.4671 | 1.2715 |      0.9252 |       0.9538 |      -1.1227 |
-| optimum   | cost_tree   | structural | cv         | 628 |     0.6513 | 2.0731 |    2.0952 | 2.4671 | 1.2715 |      0.9602 |       0.9538 |       0.3296 |
-| optimum   | cost_forest | structural | cv         | 628 |     0.3997 | 1.3612 |    1.3833 | 2.4671 | 1.2715 |      0.9745 |       0.9538 |       0.9250 |
-| optimum   | ehm         | structural | cv         | 628 |     0.6385 | 1.6740 |    1.6961 | 2.4671 | 1.2715 |      0.9682 |       0.9538 |       0.6634 |
-| optimum   | tree        | all        | cv         | 628 |     0.7436 | 3.2726 |    3.2994 | 2.4671 | 1.2715 |      0.9363 |       0.9538 |      -0.6737 |
-| optimum   | forest      | all        | cv         | 628 |     0.8599 | 2.8539 |    2.8807 | 2.4671 | 1.2715 |      0.9443 |       0.9538 |      -0.3236 |
-| optimum   | cost_tree   | all        | cv         | 628 |     0.7261 | 1.6748 |    1.7016 | 2.4671 | 1.2715 |      0.9682 |       0.9538 |       0.6627 |
-| optimum   | cost_forest | all        | cv         | 628 |     0.4140 | 1.2846 |    1.3114 | 2.4671 | 1.2715 |      0.9761 |       0.9538 |       0.9890 |
-| optimum   | ehm         | all        | cv         | 628 |     0.7484 | 1.5090 |    1.5358 | 2.4671 | 1.2715 |      0.9713 |       0.9538 |       0.8014 |
-| optimum   | tree        | structural | lofo       | 628 |     0.5478 | 8.5985 |    8.6206 | 2.4671 | 1.2715 |      0.8296 |       0.9538 |      -5.1283 |
-| optimum   | forest      | structural | lofo       | 628 |     0.6385 | 9.9348 |    9.9569 | 2.4671 | 1.2715 |      0.8025 |       0.9538 |      -6.2460 |
-| optimum   | cost_tree   | structural | lofo       | 628 |     0.5032 | 5.8396 |    5.8617 | 2.4671 | 1.2715 |      0.8854 |       0.9538 |      -2.8208 |
-| optimum   | cost_forest | structural | lofo       | 628 |     0.2962 | 2.4228 |    2.4449 | 2.4671 | 1.2715 |      0.9538 |       0.9538 |       0.0371 |
-| optimum   | ehm         | structural | lofo       | 628 |     0.4825 | 3.1064 |    3.1285 | 2.4671 | 1.2715 |      0.9395 |       0.9538 |      -0.5347 |
-| optimum   | tree        | all        | lofo       | 628 |     0.5239 | 5.1291 |    5.1558 | 2.4671 | 1.2715 |      0.8997 |       0.9538 |      -2.2265 |
-| optimum   | forest      | all        | lofo       | 628 |     0.6704 | 5.8984 |    5.9252 | 2.4671 | 1.2715 |      0.8838 |       0.9538 |      -2.8699 |
-| optimum   | cost_tree   | all        | lofo       | 628 |     0.5796 | 5.6799 |    5.7067 | 2.4671 | 1.2715 |      0.8885 |       0.9538 |      -2.6872 |
-| optimum   | cost_forest | all        | lofo       | 628 |     0.3073 | 2.4232 |    2.4499 | 2.4671 | 1.2715 |      0.9538 |       0.9538 |       0.0367 |
-| optimum   | ehm         | all        | lofo       | 628 |     0.6083 | 2.4659 |    2.4927 | 2.4671 | 1.2715 |      0.9522 |       0.9538 |       0.0010 |
-| budgeted  | tree        | structural | cv         | 628 |     0.7150 | 1.0974 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |      -2.4101 |
-| budgeted  | forest      | structural | cv         | 628 |     0.7930 | 1.0266 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.2545 |
-| budgeted  | cost_tree   | structural | cv         | 628 |     0.4252 | 1.0184 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.5614 |
-| budgeted  | cost_forest | structural | cv         | 628 |     0.3726 | 1.0167 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6233 |
-| budgeted  | ehm         | structural | cv         | 628 |     0.3471 | 1.0139 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.7292 |
-| budgeted  | tree        | all        | cv         | 628 |     0.7277 | 1.0950 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |      -2.3212 |
-| budgeted  | forest      | all        | cv         | 628 |     0.8535 | 1.0239 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.3555 |
-| budgeted  | cost_tree   | all        | cv         | 628 |     0.4968 | 1.0169 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6175 |
-| budgeted  | cost_forest | all        | cv         | 628 |     0.3997 | 1.0164 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6357 |
-| budgeted  | ehm         | all        | cv         | 628 |     0.4363 | 1.0142 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.7208 |
-| budgeted  | tree        | structural | lofo       | 628 |     0.5780 | 1.2344 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -1.5556 |
-| budgeted  | forest      | structural | lofo       | 628 |     0.6704 | 1.0797 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.1805 |
-| budgeted  | cost_tree   | structural | lofo       | 628 |     0.3010 | 1.1341 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.4300 |
-| budgeted  | cost_forest | structural | lofo       | 628 |     0.2564 | 1.0262 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.7816 |
-| budgeted  | ehm         | structural | lofo       | 628 |     0.2898 | 1.0451 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.5692 |
-| budgeted  | tree        | all        | lofo       | 628 |     0.5701 | 1.1573 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.6895 |
-| budgeted  | forest      | all        | lofo       | 628 |     0.7118 | 1.0591 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.4124 |
-| budgeted  | cost_tree   | all        | lofo       | 628 |     0.4076 | 1.1331 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.4177 |
-| budgeted  | cost_forest | all        | lofo       | 628 |     0.2484 | 1.0238 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.8079 |
-| budgeted  | ehm         | all        | lofo       | 628 |     0.2978 | 1.0421 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.6026 |
-| approx    | tree        | structural | cv         | 628 |     0.8646 | 1.0199 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -16.7748 |
-| approx    | forest      | structural | cv         | 628 |     0.9108 | 1.0200 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -17.0549 |
-| approx    | cost_tree   | structural | cv         | 628 |     0.4936 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -2.5337 |
-| approx    | cost_forest | structural | cv         | 628 |     0.3010 | 1.0175 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -0.5075 |
-| approx    | ehm         | structural | cv         | 628 |     0.3248 | 1.0176 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -0.9785 |
-| approx    | tree        | all        | cv         | 628 |     0.9045 | 1.0190 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -10.5226 |
-| approx    | forest      | all        | cv         | 628 |     0.9411 | 1.0186 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -7.5905 |
-| approx    | cost_tree   | all        | cv         | 628 |     0.5525 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -2.1160 |
-| approx    | cost_forest | all        | cv         | 628 |     0.2882 | 1.0175 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -0.5075 |
-| approx    | ehm         | all        | cv         | 628 |     0.5143 | 1.0174 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |       0.0049 |
-| approx    | tree        | structural | lofo       | 628 |     0.7484 | 1.0314 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -93.4484 |
-| approx    | forest      | structural | lofo       | 628 |     0.8201 | 1.0774 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |    -401.1723 |
-| approx    | cost_tree   | structural | lofo       | 628 |     0.4411 | 1.0216 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -27.8568 |
-| approx    | cost_forest | structural | lofo       | 628 |     0.2229 | 1.0191 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -11.4064 |
-| approx    | ehm         | structural | lofo       | 628 |     0.2994 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -2.4005 |
-| approx    | tree        | all        | lofo       | 628 |     0.8169 | 1.0632 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |    -306.1079 |
-| approx    | forest      | all        | lofo       | 628 |     0.9061 | 1.0211 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     -24.1819 |
-| approx    | cost_tree   | all        | lofo       | 628 |     0.4379 | 1.0787 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |    -410.0399 |
-| approx    | cost_forest | all        | lofo       | 628 |     0.2452 | 1.0185 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -7.2598 |
-| approx    | ehm         | all        | lofo       | 628 |     0.3392 | 1.0177 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |      -1.7780 |
+| task      | model       | features   | protocol   |   n |   n_unsolved |   accuracy |     AS |   AS_feat |    SBS |    VBS |   solved_AS |   solved_SBS |   gap_closed |
+|:----------|:------------|:-----------|:-----------|----:|-------------:|-----------:|-------:|----------:|-------:|-------:|------------:|-------------:|-------------:|
+| certified | tree        | structural | cv         | 648 |           35 |     0.8581 | 3.3290 |    3.3525 | 3.9342 | 2.7760 |      0.9352 |       0.9244 |       0.5225 |
+| certified | forest      | structural | cv         | 648 |           35 |     0.9184 | 2.8567 |    2.8802 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9303 |
+| certified | cost_tree   | structural | cv         | 648 |           35 |     0.8630 | 3.0106 |    3.0341 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7974 |
+| certified | cost_forest | structural | cv         | 648 |           35 |     0.7308 | 2.8623 |    2.8858 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9255 |
+| certified | ehm         | structural | cv         | 648 |           35 |     0.9119 | 3.0107 |    3.0342 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7973 |
+| certified | tree        | all        | cv         | 648 |           35 |     0.8581 | 3.3259 |    3.3545 | 3.9342 | 2.7760 |      0.9352 |       0.9244 |       0.5252 |
+| certified | forest      | all        | cv         | 648 |           35 |     0.9201 | 2.7776 |    2.8062 | 3.9342 | 2.7760 |      0.9460 |       0.9244 |       0.9986 |
+| certified | cost_tree   | all        | cv         | 648 |           35 |     0.8809 | 3.0105 |    3.0391 | 3.9342 | 2.7760 |      0.9414 |       0.9244 |       0.7975 |
+| certified | cost_forest | all        | cv         | 648 |           35 |     0.7276 | 2.8618 |    2.8904 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9259 |
+| certified | ehm         | all        | cv         | 648 |           35 |     0.8989 | 2.8640 |    2.8926 | 3.9342 | 2.7760 |      0.9444 |       0.9244 |       0.9240 |
+| certified | tree        | structural | lofo       | 648 |           35 |     0.7162 | 6.1160 |    6.1395 | 3.9342 | 2.7760 |      0.8796 |       0.9244 |      -1.8839 |
+| certified | forest      | structural | lofo       | 648 |           35 |     0.7569 | 5.4943 |    5.5178 | 3.9342 | 2.7760 |      0.8920 |       0.9244 |      -1.3471 |
+| certified | cost_tree   | structural | lofo       | 648 |           35 |     0.7276 | 5.0498 |    5.0733 | 3.9342 | 2.7760 |      0.9012 |       0.9244 |      -0.9633 |
+| certified | cost_forest | structural | lofo       | 648 |           35 |     0.5612 | 3.8972 |    3.9207 | 3.9342 | 2.7760 |      0.9244 |       0.9244 |       0.0319 |
+| certified | ehm         | structural | lofo       | 648 |           35 |     0.8091 | 3.4906 |    3.5141 | 3.9342 | 2.7760 |      0.9321 |       0.9244 |       0.3830 |
+| certified | tree        | all        | lofo       | 648 |           35 |     0.7178 | 6.2692 |    6.2978 | 3.9342 | 2.7760 |      0.8765 |       0.9244 |      -2.0161 |
+| certified | forest      | all        | lofo       | 648 |           35 |     0.7292 | 5.4194 |    5.4480 | 3.9342 | 2.7760 |      0.8935 |       0.9244 |      -1.2824 |
+| certified | cost_tree   | all        | lofo       | 648 |           35 |     0.7537 | 5.0485 |    5.0771 | 3.9342 | 2.7760 |      0.9012 |       0.9244 |      -0.9622 |
+| certified | cost_forest | all        | lofo       | 648 |           35 |     0.6330 | 3.9656 |    3.9942 | 3.9342 | 2.7760 |      0.9228 |       0.9244 |      -0.0271 |
+| certified | ehm         | all        | lofo       | 648 |           35 |     0.8091 | 3.3303 |    3.3589 | 3.9342 | 2.7760 |      0.9352 |       0.9244 |       0.5214 |
+| optimum   | tree        | structural | cv         | 628 |           15 |     0.7031 | 4.6145 |    4.6366 | 2.4671 | 1.2715 |      0.9092 |       0.9538 |      -1.7961 |
+| optimum   | forest      | structural | cv         | 628 |           15 |     0.8026 | 3.8167 |    3.8388 | 2.4671 | 1.2715 |      0.9252 |       0.9538 |      -1.1288 |
+| optimum   | cost_tree   | structural | cv         | 628 |           15 |     0.6672 | 2.0731 |    2.0952 | 2.4671 | 1.2715 |      0.9602 |       0.9538 |       0.3296 |
+| optimum   | cost_forest | structural | cv         | 628 |           15 |     0.4095 | 1.3612 |    1.3833 | 2.4671 | 1.2715 |      0.9745 |       0.9538 |       0.9250 |
+| optimum   | ehm         | structural | cv         | 628 |           15 |     0.6542 | 1.6740 |    1.6961 | 2.4671 | 1.2715 |      0.9682 |       0.9538 |       0.6634 |
+| optimum   | tree        | all        | cv         | 628 |           15 |     0.7667 | 3.1895 |    3.2163 | 2.4671 | 1.2715 |      0.9379 |       0.9538 |      -0.6042 |
+| optimum   | forest      | all        | cv         | 628 |           15 |     0.8630 | 2.6225 |    2.6493 | 2.4671 | 1.2715 |      0.9490 |       0.9538 |      -0.1300 |
+| optimum   | cost_tree   | all        | cv         | 628 |           15 |     0.7439 | 1.6748 |    1.7016 | 2.4671 | 1.2715 |      0.9682 |       0.9538 |       0.6627 |
+| optimum   | cost_forest | all        | cv         | 628 |           15 |     0.4241 | 1.2846 |    1.3114 | 2.4671 | 1.2715 |      0.9761 |       0.9538 |       0.9890 |
+| optimum   | ehm         | all        | cv         | 628 |           15 |     0.7667 | 1.5090 |    1.5358 | 2.4671 | 1.2715 |      0.9713 |       0.9538 |       0.8014 |
+| optimum   | tree        | structural | lofo       | 628 |           15 |     0.5106 | 7.5916 |    7.6137 | 2.4671 | 1.2715 |      0.8503 |       0.9538 |      -4.2862 |
+| optimum   | forest      | structural | lofo       | 628 |           15 |     0.6509 | 8.9337 |    8.9558 | 2.4671 | 1.2715 |      0.8232 |       0.9538 |      -5.4087 |
+| optimum   | cost_tree   | structural | lofo       | 628 |           15 |     0.5155 | 5.8396 |    5.8617 | 2.4671 | 1.2715 |      0.8854 |       0.9538 |      -2.8208 |
+| optimum   | cost_forest | structural | lofo       | 628 |           15 |     0.3034 | 2.4228 |    2.4449 | 2.4671 | 1.2715 |      0.9538 |       0.9538 |       0.0371 |
+| optimum   | ehm         | structural | lofo       | 628 |           15 |     0.4943 | 3.1064 |    3.1285 | 2.4671 | 1.2715 |      0.9395 |       0.9538 |      -0.5347 |
+| optimum   | tree        | all        | lofo       | 628 |           15 |     0.5383 | 4.8970 |    4.9238 | 2.4671 | 1.2715 |      0.9045 |       0.9538 |      -2.0324 |
+| optimum   | forest      | all        | lofo       | 628 |           15 |     0.6705 | 5.3553 |    5.3821 | 2.4671 | 1.2715 |      0.8949 |       0.9538 |      -2.4157 |
+| optimum   | cost_tree   | all        | lofo       | 628 |           15 |     0.5938 | 5.6799 |    5.7067 | 2.4671 | 1.2715 |      0.8885 |       0.9538 |      -2.6872 |
+| optimum   | cost_forest | all        | lofo       | 628 |           15 |     0.3148 | 2.4232 |    2.4499 | 2.4671 | 1.2715 |      0.9538 |       0.9538 |       0.0367 |
+| optimum   | ehm         | all        | lofo       | 628 |           15 |     0.6232 | 2.4659 |    2.4927 | 2.4671 | 1.2715 |      0.9522 |       0.9538 |       0.0010 |
+| budgeted  | tree        | structural | cv         | 628 |            0 |     0.7150 | 1.0974 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |      -2.4101 |
+| budgeted  | forest      | structural | cv         | 628 |            0 |     0.7930 | 1.0266 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.2545 |
+| budgeted  | cost_tree   | structural | cv         | 628 |            0 |     0.4252 | 1.0184 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.5614 |
+| budgeted  | cost_forest | structural | cv         | 628 |            0 |     0.3726 | 1.0167 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6233 |
+| budgeted  | ehm         | structural | cv         | 628 |            0 |     0.3471 | 1.0139 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.7292 |
+| budgeted  | tree        | all        | cv         | 628 |            0 |     0.7277 | 1.0950 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |      -2.3212 |
+| budgeted  | forest      | all        | cv         | 628 |            0 |     0.8535 | 1.0239 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.3555 |
+| budgeted  | cost_tree   | all        | cv         | 628 |            0 |     0.4968 | 1.0169 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6175 |
+| budgeted  | cost_forest | all        | cv         | 628 |            0 |     0.3997 | 1.0164 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.6357 |
+| budgeted  | ehm         | all        | cv         | 628 |            0 |     0.4363 | 1.0142 |  nan      | 1.0333 | 1.0067 |    nan      |     nan      |       0.7208 |
+| budgeted  | tree        | structural | lofo       | 628 |            0 |     0.5780 | 1.2344 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -1.5556 |
+| budgeted  | forest      | structural | lofo       | 628 |            0 |     0.6704 | 1.0797 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.1805 |
+| budgeted  | cost_tree   | structural | lofo       | 628 |            0 |     0.3010 | 1.1341 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.4300 |
+| budgeted  | cost_forest | structural | lofo       | 628 |            0 |     0.2564 | 1.0262 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.7816 |
+| budgeted  | ehm         | structural | lofo       | 628 |            0 |     0.2898 | 1.0451 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.5692 |
+| budgeted  | tree        | all        | lofo       | 628 |            0 |     0.5701 | 1.1573 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.6895 |
+| budgeted  | forest      | all        | lofo       | 628 |            0 |     0.7118 | 1.0591 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.4124 |
+| budgeted  | cost_tree   | all        | lofo       | 628 |            0 |     0.4076 | 1.1331 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |      -0.4177 |
+| budgeted  | cost_forest | all        | lofo       | 628 |            0 |     0.2484 | 1.0238 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.8079 |
+| budgeted  | ehm         | all        | lofo       | 628 |            0 |     0.2978 | 1.0421 |  nan      | 1.0958 | 1.0067 |    nan      |     nan      |       0.6026 |
+| approx    | tree        | structural | cv         | 628 |            0 |     0.8646 | 1.0199 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | forest      | structural | cv         | 628 |            0 |     0.9108 | 1.0200 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_tree   | structural | cv         | 628 |            0 |     0.4936 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_forest | structural | cv         | 628 |            0 |     0.3010 | 1.0175 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | ehm         | structural | cv         | 628 |            0 |     0.3248 | 1.0176 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | tree        | all        | cv         | 628 |            0 |     0.9045 | 1.0190 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | forest      | all        | cv         | 628 |            0 |     0.9411 | 1.0186 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_tree   | all        | cv         | 628 |            0 |     0.5525 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_forest | all        | cv         | 628 |            0 |     0.2882 | 1.0175 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | ehm         | all        | cv         | 628 |            0 |     0.5143 | 1.0174 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | tree        | structural | lofo       | 628 |            0 |     0.7484 | 1.0314 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | forest      | structural | lofo       | 628 |            0 |     0.8201 | 1.0774 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_tree   | structural | lofo       | 628 |            0 |     0.4411 | 1.0216 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_forest | structural | lofo       | 628 |            0 |     0.2229 | 1.0191 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | ehm         | structural | lofo       | 628 |            0 |     0.2994 | 1.0178 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | tree        | all        | lofo       | 628 |            0 |     0.8169 | 1.0632 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | forest      | all        | lofo       | 628 |            0 |     0.9061 | 1.0211 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_tree   | all        | lofo       | 628 |            0 |     0.4379 | 1.0787 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | cost_forest | all        | lofo       | 628 |            0 |     0.2452 | 1.0185 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
+| approx    | ehm         | all        | lofo       | 628 |            0 |     0.3392 | 1.0177 |  nan      | 1.0174 | 1.0173 |    nan      |     nan      |     nan      |
 
 ### Task `certified`
 
-Label distribution: `{'bnb': 461, 'nt_flow': 90, 'ilp': 38, 'matching': 35, 'td_dp': 23, 'lp_round': 1}`
+Label distribution: `{'bnb': 461, 'nt_flow': 90, 'ilp': 38, 'unsolved': 35, 'td_dp': 23, 'lp_round': 1}`
 
 Oracle label by family:
 
-| family    |   bnb |   ilp |   lp_round |   matching |   nt_flow |   td_dp |
-|:----------|------:|------:|-----------:|-----------:|----------:|--------:|
-| er        |    56 |     0 |          0 |         16 |         0 |       0 |
-| ba        |    46 |     0 |          1 |          0 |         1 |       0 |
-| ws        |    56 |    21 |          0 |          6 |         0 |      13 |
-| plc       |    72 |     0 |          0 |          0 |         0 |       0 |
-| rgg       |    15 |    14 |          0 |          0 |         0 |       7 |
-| ktree     |   120 |     0 |          0 |          0 |         0 |       0 |
-| bipartite |    33 |     0 |          0 |          0 |        39 |       0 |
-| sbm       |    17 |     3 |          0 |         13 |         0 |       3 |
-| trap      |    46 |     0 |          0 |          0 |        50 |       0 |
+| family    |   bnb |   ilp |   lp_round |   nt_flow |   td_dp |   unsolved |
+|:----------|------:|------:|-----------:|----------:|--------:|-----------:|
+| er        |    56 |     0 |          0 |         0 |       0 |         16 |
+| ba        |    46 |     0 |          1 |         1 |       0 |          0 |
+| ws        |    56 |    21 |          0 |         0 |      13 |          6 |
+| plc       |    72 |     0 |          0 |         0 |       0 |          0 |
+| rgg       |    15 |    14 |          0 |         0 |       7 |          0 |
+| ktree     |   120 |     0 |          0 |         0 |       0 |          0 |
+| bipartite |    33 |     0 |          0 |        39 |       0 |          0 |
+| sbm       |    17 |     3 |          0 |         0 |       3 |         13 |
+| trap      |    46 |     0 |          0 |        50 |       0 |          0 |
 
 Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 
@@ -403,70 +481,70 @@ Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 |   |   |--- run bnb  (n=277, mean cost 5.52)
 ```
 
-Cost-tree feature usage (share of total regret reduction): `{'lap_gap': np.float64(0.991), 'avg_deg': np.float64(0.005), 'tw_ub': np.float64(0.003), 'clustering': np.float64(0.001), 'deg_skew': np.float64(0.001), 'assortativity': np.float64(0.0)}`
+Cost-tree feature usage (share of total regret reduction): `{'lap_gap': 0.991, 'avg_deg': 0.005, 'tw_ub': 0.003, 'clustering': 0.001, 'deg_skew': 0.001, 'assortativity': 0.0}`
 
-Accuracy-objective CART tree (train acc 0.792):
+Accuracy-objective CART tree (train acc 0.819):
 
 ```
-|--- max_deg_ratio <= 2.428
-|   |--- bip_spec <= 0.026
+|--- clustering <= 0.003
+|   |--- max_deg_ratio <= 2.428
 |   |   |--- assortativity <= -0.254
 |   |   |   |--- class: bnb
 |   |   |--- assortativity >  -0.254
 |   |   |   |--- class: nt_flow
-|   |--- bip_spec >  0.026
-|   |   |--- n <= 125.500
-|   |   |   |--- class: bnb
-|   |   |--- n >  125.500
-|   |   |   |--- class: matching
-|--- max_deg_ratio >  2.428
-|   |--- clustering <= 0.003
+|   |--- max_deg_ratio >  2.428
 |   |   |--- m <= 193.500
 |   |   |   |--- class: bnb
 |   |   |--- m >  193.500
 |   |   |   |--- class: bnb
-|   |--- clustering >  0.003
-|   |   |--- n <= 193.500
+|--- clustering >  0.003
+|   |--- max_deg_ratio <= 1.780
+|   |   |--- lap_gap <= 0.172
 |   |   |   |--- class: bnb
-|   |   |--- n >  193.500
+|   |   |--- lap_gap >  0.172
+|   |   |   |--- class: bnb
+|   |--- max_deg_ratio >  1.780
+|   |   |--- assortativity <= 0.569
+|   |   |   |--- class: bnb
+|   |   |--- assortativity >  0.569
 |   |   |   |--- class: bnb
 
 ```
 
 Top permutation importances (forest, all features):
 
-|                  |   gini |   perm_mean |   perm_std |
-|:-----------------|-------:|------------:|-----------:|
-| sandwich_gap     | 0.0860 |      0.0167 |     0.0089 |
-| n                | 0.0575 |      0.0141 |     0.0076 |
-| tw_ub            | 0.0779 |      0.0126 |     0.0055 |
-| adj_lambda_ratio | 0.0349 |      0.0126 |     0.0030 |
-| deg_cv           | 0.0432 |      0.0097 |     0.0060 |
-| density          | 0.0349 |      0.0087 |     0.0040 |
-| degeneracy_ratio | 0.0262 |      0.0038 |     0.0039 |
-| lp_ratio         | 0.0126 |      0.0036 |     0.0029 |
-| m                | 0.0445 |      0.0026 |     0.0057 |
-| max_deg_ratio    | 0.0731 |      0.0026 |     0.0080 |
+|               |   gini |   perm_mean |   perm_std |
+|:--------------|-------:|------------:|-----------:|
+| sandwich_gap  | 0.0912 |      0.0408 |     0.0128 |
+| max_deg_ratio | 0.0664 |      0.0253 |     0.0065 |
+| clustering    | 0.0652 |      0.0223 |     0.0062 |
+| is_bipartite  | 0.0440 |      0.0190 |     0.0061 |
+| deg_cv        | 0.0450 |      0.0163 |     0.0060 |
+| transitivity  | 0.0763 |      0.0163 |     0.0052 |
+| lap_gap       | 0.0696 |      0.0144 |     0.0063 |
+| assortativity | 0.0720 |      0.0128 |     0.0046 |
+| m             | 0.0358 |      0.0122 |     0.0059 |
+| tw_ub         | 0.0410 |      0.0120 |     0.0044 |
 
 ![tree](figures/tree_certified.png)
 
 ### Task `optimum`
 
-Label distribution: `{'greedy': 244, 'bnb': 242, 'nt_flow': 67, 'ilp': 37, 'td_dp': 22, 'matching': 15, 'lp_round': 1}`
+Label distribution: `{'greedy': 244, 'bnb': 242, 'nt_flow': 67, 'ilp': 37, 'td_dp': 22, 'unsolved': 15, 'lp_round': 1}`
 
 Oracle label by family:
 
-| family    |   bnb |   greedy |   ilp |   lp_round |   matching |   nt_flow |   td_dp |
-|:----------|------:|---------:|------:|-----------:|-----------:|----------:|--------:|
-| er        |    51 |        5 |     0 |          0 |          2 |         0 |       0 |
-| ba        |    27 |       20 |     0 |          1 |          0 |         0 |       0 |
-| ws        |    54 |        2 |    21 |          0 |          6 |         0 |      13 |
-| plc       |    45 |       27 |     0 |          0 |          0 |         0 |       0 |
-| rgg       |    12 |        5 |    13 |          0 |          0 |         0 |       6 |
-| ktree     |    21 |       99 |     0 |          0 |          0 |         0 |       0 |
-| bipartite |    12 |       32 |     0 |          0 |          0 |        28 |       0 |
-| sbm       |    12 |        5 |     3 |          0 |          7 |         0 |       3 |
-| trap      |     8 |       49 |     0 |          0 |          0 |        39 |       0 |
+| family    |   bnb |   greedy |   ilp |   lp_round |   nt_flow |   td_dp |   unsolved |
+|:----------|------:|---------:|------:|-----------:|----------:|--------:|-----------:|
+| er        |    51 |        5 |     0 |          0 |         0 |       0 |          2 |
+| ba        |    27 |       20 |     0 |          1 |         0 |       0 |          0 |
+| ws        |    54 |        2 |    21 |          0 |         0 |      13 |          6 |
+| plc       |    45 |       27 |     0 |          0 |         0 |       0 |          0 |
+| rgg       |    12 |        5 |    13 |          0 |         0 |       6 |          0 |
+| ktree     |    21 |       99 |     0 |          0 |         0 |       0 |          0 |
+| bipartite |    12 |       32 |     0 |          0 |        28 |       0 |          0 |
+| sbm       |    12 |        5 |     3 |          0 |         0 |       3 |          7 |
+| trap      |     8 |       49 |     0 |          0 |        39 |       0 |          0 |
 
 Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 
@@ -495,9 +573,9 @@ Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 |   |   |   |--- run nt_flow  (n=84, mean cost 0.00077)
 ```
 
-Cost-tree feature usage (share of total regret reduction): `{'lap_gap': np.float64(0.991), 'avg_deg': np.float64(0.005), 'tw_ub': np.float64(0.003), 'is_bipartite': np.float64(0.001), 'deg_skew': np.float64(0.001), 'assortativity': np.float64(0.0)}`
+Cost-tree feature usage (share of total regret reduction): `{'lap_gap': 0.991, 'avg_deg': 0.005, 'tw_ub': 0.003, 'is_bipartite': 0.001, 'deg_skew': 0.001, 'assortativity': 0.0}`
 
-Accuracy-objective CART tree (train acc 0.721):
+Accuracy-objective CART tree (train acc 0.739):
 
 ```
 |--- assortativity <= -0.197
@@ -527,18 +605,18 @@ Accuracy-objective CART tree (train acc 0.721):
 
 Top permutation importances (forest, all features):
 
-|                  |   gini |   perm_mean |   perm_std |
-|:-----------------|-------:|------------:|-----------:|
-| sandwich_gap     | 0.1538 |      0.1328 |     0.0232 |
-| deg_cv           | 0.0566 |      0.0167 |     0.0070 |
-| clustering       | 0.0591 |      0.0153 |     0.0095 |
-| tw_ub            | 0.0444 |      0.0122 |     0.0082 |
-| max_deg_ratio    | 0.0428 |      0.0119 |     0.0058 |
-| degeneracy_ratio | 0.0268 |      0.0108 |     0.0054 |
-| n                | 0.0343 |      0.0087 |     0.0054 |
-| is_bipartite     | 0.0181 |      0.0074 |     0.0039 |
-| lp_half_frac     | 0.0471 |      0.0071 |     0.0061 |
-| tw_ratio         | 0.0371 |      0.0061 |     0.0048 |
+|               |   gini |   perm_mean |   perm_std |
+|:--------------|-------:|------------:|-----------:|
+| sandwich_gap  | 0.1352 |      0.0973 |     0.0173 |
+| assortativity | 0.1197 |      0.0247 |     0.0122 |
+| deg_cv        | 0.0550 |      0.0215 |     0.0072 |
+| clustering    | 0.0566 |      0.0125 |     0.0069 |
+| lap_gap       | 0.0519 |      0.0092 |     0.0067 |
+| is_bipartite  | 0.0205 |      0.0090 |     0.0049 |
+| tw_ub         | 0.0379 |      0.0087 |     0.0102 |
+| lp_half_frac  | 0.0439 |      0.0082 |     0.0056 |
+| density       | 0.0341 |      0.0076 |     0.0055 |
+| max_deg_ratio | 0.0436 |      0.0068 |     0.0045 |
 
 ![tree](figures/tree_optimum.png)
 
@@ -587,7 +665,7 @@ Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 |   |   |   |--- run greedy  (n=35, mean cost 1.03)
 ```
 
-Cost-tree feature usage (share of total regret reduction): `{'clustering': np.float64(0.678), 'm': np.float64(0.272), 'n': np.float64(0.039), 'assortativity': np.float64(0.011), 'bip_spec': np.float64(0.0), 'is_bipartite': np.float64(0.0)}`
+Cost-tree feature usage (share of total regret reduction): `{'clustering': 0.678, 'm': 0.272, 'n': 0.039, 'assortativity': 0.011, 'bip_spec': 0.0, 'is_bipartite': 0.0}`
 
 Accuracy-objective CART tree (train acc 0.739):
 
@@ -667,7 +745,7 @@ Regret-minimising tree (depth 3, structural features; leaf cost in task units):
 |   |--- run greedy  (n=72, mean cost 1.03)
 ```
 
-Cost-tree feature usage (share of total regret reduction): `{'bip_spec': np.float64(0.575), 'assortativity': np.float64(0.379), 'lap_gap': np.float64(0.047)}`
+Cost-tree feature usage (share of total regret reduction): `{'bip_spec': 0.575, 'assortativity': 0.379, 'lap_gap': 0.047}`
 
 Accuracy-objective CART tree (train acc 0.889):
 

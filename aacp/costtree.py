@@ -157,7 +157,7 @@ class CostSensitiveTree:
 
         rec(self.root_)
         s = sum(imp.values()) or 1.0
-        return {k: v / s for k, v in sorted(imp.items(), key=lambda kv: -kv[1]) if v > 0}
+        return {k: float(v / s) for k, v in sorted(imp.items(), key=lambda kv: -kv[1]) if v > 0}
 
 
 class CostSensitiveForest:
