@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en" data-theme="notebook">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AACP · Adaptive Algorithm Selection</title>
+<meta name="description" content="Interactive demo: per-instance algorithm selection for Minimum Vertex Cover.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='8' cy='9' r='5' fill='%23d9402b'/%3E%3Ccircle cx='24' cy='9' r='5' fill='none' stroke='%231d1b16' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='24' r='5' fill='%23d9402b'/%3E%3Cpath d='M12 11l-1 8M20 11l-2 8M13 9h6' stroke='%231d1b16' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="mast-left">
+    <p class="kicker"><span class="dot"></span>AACP &middot; Minimum Vertex Cover &middot; 7 algorithms &middot; 648 benchmark graphs</p>
+    <h1>Which algorithm <em>should</em> run<span class="q">?</span></h1>
+    <p class="lede">Worst-case bounds rank algorithms by type. This system looks at the <em>instance</em>:
+      it measures a graph's structure, predicts which strategy will win, explains why, and then
+      lets you race the whole portfolio to check.</p>
+  </div>
+  <div class="mast-right">
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch theme" title="Switch between notebook and blueprint">
+      <span class="tt-notebook">Notebook</span><span class="tt-sep">/</span><span class="tt-blueprint">Blueprint</span>
+    </button>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" class="tab" data-tab="play" aria-selected="true"><span class="sec">§1</span>Playground</button>
+    <button role="tab" class="tab" data-tab="findings" aria-selected="false"><span class="sec">§2</span>Findings</button>
+    <button role="tab" class="tab" data-tab="selector" aria-selected="false"><span class="sec">§3</span>The selector</button>
+    <button role="tab" class="tab" data-tab="trap" aria-selected="false"><span class="sec">§4</span>Greedy's trap</button>
+    <button role="tab" class="tab" data-tab="portfolio" aria-selected="false"><span class="sec">§5</span>Portfolio</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============================ §1 PLAYGROUND ============================ -->
+<section class="panel active" id="tab-play" role="tabpanel">
+  <div class="play-grid">
+    <aside class="controls card reveal" style="--d:0">
+      <h2 class="card-title">1 · Pick a graph</h2>
+      <div class="presets" id="presets"></div>
+
+      <details class="builder" id="builder">
+        <summary>Build your own</summary>
+        <label class="field">Family
+          <select id="family"></select>
+        </label>
+        <label class="field">Vertices <output id="nOut">80</output>
+          <input type="range" id="nRange" min="10" max="250" value="80">
+        </label>
+        <div id="paramFields"></div>
+        <div class="row">
+          <label class="field grow">Seed <input type="number" id="seed" value="1" min="0"></label>
+          <button class="btn ghost icon" id="dice" title="Random seed" aria-label="Random seed">⚄</button>
+        </div>
+        <button class="btn primary wide" id="generate">Generate graph</button>
+      </details>
+
+      <details class="builder" id="paste">
+        <summary>Paste an edge list</summary>
+        <textarea id="edgeText" rows="6" spellcheck="false" placeholder="one edge per line, e.g.&#10;web db&#10;web cache&#10;db backup"></textarea>
+        <div class="row">
+          <button class="btn primary grow" id="parse">Analyse</button>
+          <label class="btn ghost" title="Load a .txt / .edgelist file">File…<input type="file" id="edgeFile" accept=".txt,.edgelist,.csv,.tsv" hidden></label>
+        </div>
+      </details>
+
+      <div class="feature-box">
+        <h3 class="mini-title">Measured structure</h3>
+        <dl class="features" id="featureList"><dd class="muted">—</dd></dl>
+        <p class="tiny muted" id="analysisTime"></p>
+      </div>
+    </aside>
+
+    <div class="stage card reveal" style="--d:1">
+      <div class="stage-head">
+        <div>
+          <h2 class="card-title">2 · The instance</h2>
+          <p class="stage-caption" id="graphCaption">Choose a preset to begin.</p>
+        </div>
+        <div class="legend-inline" id="graphLegend">
+          <span><i class="lg-node"></i>vertex</span>
+          <span><i class="lg-node in"></i>in cover</span>
+        </div>
+      </div>
+      <div class="graph-wrap">
+        <svg id="graph" viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Graph drawing"></svg>
+        <div class="graph-tip" id="graphTip" hidden></div>
+        <div class="empty-state" id="emptyState">
+          <p class="big">No graph yet.</p>
+          <p>Pick a preset on the left. Try <b>Geometric clusters</b> and then <b>Two-tier</b>: the verdict changes.</p>
+        </div>
+      </div>
+      <p class="cover-note" id="coverNote"></p>
+    </div>
+
+    <aside class="verdict card reveal" style="--d:2">
+      <h2 class="card-title">3 · The verdict</h2>
+      <div class="seg" id="taskSeg" role="radiogroup" aria-label="Goal"></div>
+      <p class="task-desc" id="taskDesc"></p>
+      <div class="verdict-body" id="verdictBody">
+        <p class="muted">The selector will explain its choice here.</p>
+      </div>
+      <div class="run-row">
+        <label class="field compact">Budget
+          <select id="budget"><option value="1">1 s</option><option value="3" selected>3 s</option><option value="8">8 s</option></select>
+        </label>
+        <button class="btn primary grow" id="runAll" disabled>Race all 7 algorithms ▸</button>
+      </div>
+    </aside>
+  </div>
+
+  <section class="race card reveal" style="--d:3" id="raceCard" hidden>
+    <div class="race-head">
+      <h2 class="card-title">4 · The race <span class="muted">— every algorithm, same graph, same budget</span></h2>
+      <p class="race-summary" id="raceSummary"></p>
+    </div>
+    <div class="race-scale" id="raceScale"></div>
+    <ol class="race-list" id="raceList"></ol>
+    <p class="tiny muted">Bars use a log time scale. Click a row to draw that algorithm's cover on the graph. <b>Proved</b> = the algorithm certified optimality itself (exact search, or its cover matched its own lower bound).</p>
+  </section>
+</section>
+
+<!-- ============================ §2 FINDINGS ============================ -->
+<section class="panel" id="tab-findings" role="tabpanel">
+  <div class="section-intro reveal">
+    <h2 class="display">Worst-case bounds name the wrong parameter.</h2>
+    <p>648 graphs, nine structural families, seven algorithms. Each figure tests one textbook bound against what really drives the cost. Hover a point to see its graph; click a family in the legend to hide it.</p>
+    <div class="legend-families" id="famLegend"></div>
+  </div>
+  <div class="fig-grid">
+    <figure class="fig card reveal" style="--d:0">
+      <figcaption><span class="fig-no">Fig. 1</span> Branch &amp; bound search nodes</figcaption>
+      <div class="seg small" id="bnbX"></div>
+      <div class="chart" id="chartBnb"></div>
+      <div class="theory">
+        <div><span class="lbl">Theory says</span>O*(1.4656<sup>k</sup>): the cover size <i>k</i> drives the search.</div>
+        <div><span class="lbl">Data says</span><span id="bnbRho"></span></div>
+      </div>
+    </figure>
+    <figure class="fig card reveal" style="--d:1">
+      <figcaption><span class="fig-no">Fig. 2</span> ILP solve time vs integrality gap</figcaption>
+      <div class="chart" id="chartIlp"></div>
+      <div class="theory">
+        <div><span class="lbl">Theory says</span>ILP is exponential in the worst case.</div>
+        <div><span class="lbl">Data says</span><span id="ilpRho"></span></div>
+      </div>
+    </figure>
+    <figure class="fig card reveal" style="--d:2">
+      <figcaption><span class="fig-no">Fig. 3</span> Tree-decomposition DP vs treewidth</figcaption>
+      <div class="chart" id="chartDp"></div>
+      <div class="theory">
+        <div><span class="lbl">Theory says</span>O(2<sup>tw</sup>·n): cheap when the treewidth is small.</div>
+        <div><span class="lbl">Data says</span>Every graph with treewidth bound ≤ 19 is solved; failures begin at 20. Below tw ≈ 8, building the decomposition (polynomial) costs more than the DP itself.</div>
+      </div>
+    </figure>
+    <figure class="fig card reveal" style="--d:3">
+      <figcaption><span class="fig-no">Fig. 4</span> Greedy's approximation ratio</figcaption>
+      <div class="seg small" id="greedyX"></div>
+      <div class="chart" id="chartGreedy"></div>
+      <div class="theory">
+        <div><span class="lbl">Hypothesis</span>"Greedy degrades when clustering is high."</div>
+        <div><span class="lbl">Data says</span><span id="greedyRho"></span></div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ §3 SELECTOR ============================ -->
+<section class="panel" id="tab-selector" role="tabpanel">
+  <div class="section-intro reveal">
+    <h2 class="display">A decision tree trained on <em>regret</em>, not accuracy.</h2>
+    <p>Each split is chosen to minimise the total cost of the algorithm the tree would run, so a 50-second mistake counts 50 000× more than a 1 ms one. The path for the graph in your playground is traced in red.</p>
+  </div>
+  <div class="card reveal tree-card" style="--d:1">
+    <div class="tree-head">
+      <div class="seg" id="treeTaskSeg"></div>
+      <p class="tiny muted" id="treeNote"></p>
+    </div>
+    <div class="tree-wrap"><svg id="treeSvg" role="img" aria-label="Selector decision tree"></svg></div>
+  </div>
+  <div class="split-2">
+    <div class="card reveal" style="--d:2">
+      <h3 class="card-title">How much of the gap to the oracle is closed?</h3>
+      <div class="seg small" id="gapProto"></div>
+      <div class="chart" id="chartGap"></div>
+      <p class="tiny muted">1 = as good as a per-instance oracle; 0 = no better than always running the single best solver (bnb); below 0 = worse than not selecting at all. 5-fold CV or leave-one-family-out, all features.</p>
+    </div>
+    <div class="card reveal callout-card" style="--d:3">
+      <h3 class="card-title">Why accuracy is the wrong objective</h3>
+      <div class="asym">
+        <div class="asym-cell"><span class="asym-n">1 ms</span><span>cost of running <b>bnb</b> where greedy was enough</span></div>
+        <div class="asym-vs">vs</div>
+        <div class="asym-cell hot"><span class="asym-n">50 s</span><span>cost of running <b>greedy</b> where it is not optimal</span></div>
+      </div>
+      <p>A classifier counts both mistakes as "one error". On the <i>fastest-to-optimum</i> task, the accuracy-trained tree is right 77% of the time and is still <b>worse than never selecting</b>. The regret tree is right less often (74%) yet closes <b>66%</b> of the gap; bagging it closes <b>99%</b>.</p>
+      <p class="tiny muted">Honest caveat: on graph families the selector never saw in training, most selectors fall below the single best solver. See REPORT.md §5.5.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ §4 TRAP ============================ -->
+<section class="panel" id="tab-trap" role="tabpanel">
+  <div class="section-intro reveal">
+    <h2 class="display">Watch greedy walk into Johnson's trap.</h2>
+    <p>The bottom row <b>L</b> (k vertices) is an optimal cover. Each block R<sub>i</sub> on top connects to groups of i vertices in L. Greedy always takes the highest-degree vertex, and the degrees are rigged so that is always an R vertex. It ends up with ≈ k·(H(k) − 1) vertices, the worst case of its O(log n) bound. Then add a little noise.</p>
+  </div>
+  <div class="trap-grid">
+    <div class="card reveal controls-card" style="--d:0">
+      <label class="field">k (size of L) <output id="kOut">12</output><input type="range" id="kRange" min="4" max="40" value="12"></label>
+      <label class="field">Random extra edges <output id="noiseOut">0%</output><input type="range" id="noiseRange" min="0" max="10" value="0"></label>
+      <div class="row">
+        <button class="btn primary grow" id="trapPlay">▶ Play greedy</button>
+        <button class="btn ghost" id="trapStep" title="One greedy step">Step</button>
+        <button class="btn ghost" id="trapReset" title="Reset">↺</button>
+      </div>
+      <div class="meter">
+        <div class="meter-row"><span>greedy picks</span><b id="greedyCount">0</b></div>
+        <div class="meter-row"><span>optimum</span><b id="optCount">–</b></div>
+        <div class="meter-row big"><span>ratio</span><b id="trapRatio">–</b></div>
+        <div class="ratio-bar"><div class="ratio-fill" id="ratioFill"></div><div class="ratio-mark" id="ratioMark" title="H(k) − 1"></div></div>
+        <p class="tiny muted" id="trapBound"></p>
+      </div>
+      <p class="tiny">Try k = 32, then move noise to 1%. The trap needs a knife-edge degree ordering, and a few random edges destroy it: the worst case occupies a vanishingly small part of instance space.</p>
+    </div>
+    <div class="card reveal trap-stage" style="--d:1">
+      <svg id="trapSvg" viewBox="0 0 1000 520" role="img" aria-label="Greedy trap graph"></svg>
+      <div class="legend-inline">
+        <span><i class="lg-node in"></i>picked by greedy</span>
+        <span><i class="lg-node opt"></i>optimal cover (L)</span>
+        <span><i class="lg-edge"></i>still uncovered</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ §5 PORTFOLIO ============================ -->
+<section class="panel" id="tab-portfolio" role="tabpanel">
+  <div class="section-intro reveal">
+    <h2 class="display">Seven algorithms, five syllabus units.</h2>
+    <p>Each card pairs the textbook guarantee with what was measured on the 648-graph benchmark (5 s budget per run).</p>
+  </div>
+  <div class="algo-grid" id="algoGrid"></div>
+</section>
+</main>
+
+<footer class="foot">
+  <span>AACP · Design &amp; Analysis of Algorithms project</span>
+  <span class="muted">Run locally with <code>python -m aacp serve</code> · full write-up in <code>REPORT.md</code></span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -3,6 +3,7 @@
     python -m aacp benchmark [--scale 2 --budget 5]   # run portfolio -> data/
     python -m aacp analyze   [--data data --out reports]
     python -m aacp select    --graph edges.txt        # pick an algorithm for a new graph
+    python -m aacp serve     [--port 8000 --open]     # interactive demo in the browser
 """
 
 from __future__ import annotations
@@ -28,6 +29,9 @@ def main(argv=None):
         a = ap.parse_args(rest)
         from .analysis import write_report
         print(write_report(a.data, a.out))
+    elif cmd == "serve":
+        from .web.server import main as srv
+        srv(rest)
     elif cmd == "select":
         ap = argparse.ArgumentParser()
         ap.add_argument("--data", type=Path, default=Path("data"))

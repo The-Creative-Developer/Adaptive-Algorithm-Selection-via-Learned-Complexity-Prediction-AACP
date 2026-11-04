@@ -19,16 +19,23 @@ from .common import Deadline, Result
 
 def greedy_cover_adj(adj: dict[int, set[int]]) -> set[int]:
     """Max-degree greedy on an adjacency dict (not modified). Ties -> smallest id."""
+    return set(greedy_order(adj))
+
+
+def greedy_order(adj: dict[int, set[int]]) -> list[int]:
+    """The vertices max-degree greedy picks, in pick order."""
     deg = {v: len(nb) for v, nb in adj.items()}
     alive = {v: set(nb) for v, nb in adj.items()}
     heap = [(-d, v) for v, d in deg.items() if d > 0]
     heapq.heapify(heap)
     cover: set[int] = set()
+    order: list[int] = []
     while heap:
         d, v = heapq.heappop(heap)
         if v in cover or -d != deg[v] or deg[v] == 0:
             continue  # stale entry
         cover.add(v)
+        order.append(v)
         for u in alive[v]:
             alive[u].discard(v)
             deg[u] -= 1
@@ -36,7 +43,7 @@ def greedy_cover_adj(adj: dict[int, set[int]]) -> set[int]:
                 heapq.heappush(heap, (-deg[u], u))
         alive[v] = set()
         deg[v] = 0
-    return cover
+    return order
 
 
 def greedy(G: nx.Graph, deadline: Deadline | None = None) -> Result:

@@ -26,6 +26,7 @@ import pandas as pd
 class _Node:
     cost: np.ndarray                    # mean cost vector of training instances
     n: int
+    id: int = -1                         # pre-order index, assigned after fitting
     feature: int = -1
     threshold: float = 0.0
     left: "_Node | None" = None
@@ -52,6 +53,14 @@ class CostSensitiveTree:
         Xv = X.to_numpy(float)
         Cv = np.where(np.isfinite(C.to_numpy(float)), C.to_numpy(float), 1e6)
         self.root_ = self._grow(Xv, Cv, 0)
+        counter = iter(range(1 << 30))
+
+        def number(node):
+            node.id = next(counter)
+            if not node.leaf:
+                number(node.left); number(node.right)
+
+        number(self.root_)
         return self
 
     def _grow(self, X, C, depth) -> _Node:
@@ -122,6 +131,31 @@ class CostSensitiveTree:
                 steps.append(f"{name}={x[node.feature]:.3g} > {node.threshold:.3g}")
                 node = node.right
         return steps
+
+    def trace(self, x: np.ndarray) -> dict:
+        """Root-to-leaf path for one feature vector (ordered like feature_names_)."""
+        node, steps = self.root_, []
+        while not node.leaf:
+            v = float(x[node.feature])
+            left = v <= node.threshold
+            steps.append({"node": node.id, "feature": self.feature_names_[node.feature],
+                          "threshold": node.threshold, "value": v, "left": left})
+            node = node.left if left else node.right
+        a = int(np.argmin(node.cost))
+        return {"steps": steps, "leaf": node.id, "choice": self.classes_[a],
+                "leaf_n": node.n, "leaf_cost": dict(zip(self.classes_, map(float, node.cost)))}
+
+    def to_dict(self) -> dict:
+        def rec(node):
+            d = {"id": node.id, "n": node.n}
+            if node.leaf:
+                a = int(np.argmin(node.cost))
+                d.update(choice=self.classes_[a], cost=float(node.cost[a]))
+            else:
+                d.update(feature=self.feature_names_[node.feature], threshold=node.threshold,
+                         left=rec(node.left), right=rec(node.right))
+            return d
+        return rec(self.root_)
 
     def export_text(self, fmt="{:.3g}") -> str:
         lines = []

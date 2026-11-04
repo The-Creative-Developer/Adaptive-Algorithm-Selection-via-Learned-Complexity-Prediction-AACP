@@ -46,6 +46,34 @@ implemented from scratch. Only the ILP/LP solves call a library (SciPy's HiGHS).
   leave-one-family-out evaluation only the SATzilla-style runtime-regression model
   (EHM) still beats the single best solver.
 
+## Interactive demo
+
+```bash
+python -m aacp serve --open
+```
+
+This opens <http://localhost:8000>. The demo has no extra dependencies and no build
+step, and the fonts are bundled, so it works offline in a classroom. It has five
+sections:
+
+| § | section | what it shows |
+|---|---|---|
+| 1 | **Playground** | Pick a preset (or build or paste a graph). The selector's verdict comes with its decision path, drawn as number lines. Then race all 7 algorithms live, with *proved optimal* stamps, and click any row to draw that algorithm's cover. |
+| 2 | **Findings** | Interactive versions of the theory-vs-practice figures, with switchable x-axes and family filters. |
+| 3 | **The selector** | The learned regret tree, with your graph's path traced through it, and gap-closed results for every selector. |
+| 4 | **Greedy's trap** | A step-by-step animation of greedy falling into Johnson's construction, and how a little noise breaks the trap. |
+| 5 | **Portfolio** | The textbook guarantee next to the measured performance for each algorithm. |
+
+There is a *Notebook / Blueprint* theme switch in the top-right corner.
+
+| | |
+|---|---|
+| ![Playground](docs/screenshots/playground.jpg) | ![Findings](docs/screenshots/findings.jpg) |
+| ![Selector, blueprint theme](docs/screenshots/selector-blueprint.jpg) | ![Greedy trap](docs/screenshots/trap.jpg) |
+
+Demo tips: *Geometric clusters* → `td_dp`, *Wide & clustered* → `ilp`, *Two-tier* →
+`nt_flow`, and *Hub-heavy* → `bnb`. In each case, hit **Race** to check the pick.
+
 ## Quick start
 
 ```bash
@@ -89,5 +117,7 @@ aacp/
   costtree.py      regret-minimising decision tree and forest
   analysis.py      theory-vs-practice analysis, figures, reports/results.md
   selector.py      deployable selector with explanations
+  web/             demo server (stdlib http.server) + static/ front end (vanilla JS/SVG, vendored fonts)
+docs/screenshots/  demo screenshots
 tests/             brute-force correctness, LP half-integrality, flow, trap tightness, cost tree
 ```

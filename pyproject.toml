@@ -13,7 +13,10 @@ dependencies = ["numpy", "scipy", "networkx", "pandas", "scikit-learn", "matplot
 test = ["pytest"]
 
 [tool.setuptools]
-packages = ["aacp", "aacp.algorithms"]
+packages = ["aacp", "aacp.algorithms", "aacp.web"]
+
+[tool.setuptools.package-data]
+"aacp.web" = ["static/*", "static/fonts/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
