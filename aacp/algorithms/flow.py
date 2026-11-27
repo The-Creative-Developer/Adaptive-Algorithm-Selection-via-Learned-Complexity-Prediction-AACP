@@ -26,8 +26,9 @@ from .greedy import greedy_cover_adj
 
 
 class Dinic:
-    def __init__(self, n: int):
+    def __init__(self, n: int, eps: float = 0.0):
         self.n = n
+        self.eps = eps  # residual capacities <= eps count as saturated (float networks)
         self.to: list[int] = []
         self.cap: list[int] = []
         self.head: list[list[int]] = [[] for _ in range(n)]
@@ -44,7 +45,7 @@ class Dinic:
         while q:
             u = q.popleft()
             for e in self.head[u]:
-                if self.cap[e] > 0 and level[self.to[e]] < 0:
+                if self.cap[e] > self.eps and level[self.to[e]] < 0:
                     level[self.to[e]] = level[u] + 1
                     q.append(self.to[e])
         return level if level[t] >= 0 else None
@@ -73,7 +74,7 @@ class Dinic:
                     while it[u] < len(self.head[u]):
                         e = self.head[u][it[u]]
                         v = self.to[e]
-                        if self.cap[e] > 0 and level[v] == level[u] + 1:
+                        if self.cap[e] > self.eps and level[v] == level[u] + 1:
                             stack.append(v)
                             path_edges.append(e)
                             advanced = True
@@ -98,7 +99,7 @@ class Dinic:
         while q:
             u = q.popleft()
             for e in self.head[u]:
-                if self.cap[e] > 0 and self.to[e] not in seen:
+                if self.cap[e] > self.eps and self.to[e] not in seen:
                     seen.add(self.to[e])
                     q.append(self.to[e])
         return seen

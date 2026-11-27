@@ -14,11 +14,12 @@
 
 <header class="masthead">
   <div class="mast-left">
-    <p class="kicker"><span class="dot"></span>AACP &middot; Minimum Vertex Cover &middot; 7 algorithms &middot; 648 benchmark graphs</p>
+    <p class="kicker"><span class="dot"></span>AACP &middot; Vertex cover · Independent set · Clique &middot; 7 algorithms &middot; 648 benchmark graphs</p>
     <h1>Which algorithm <em>should</em> run<span class="q">?</span></h1>
-    <p class="lede">Worst-case bounds rank algorithms by type. This system looks at the <em>instance</em>:
-      it measures a graph's structure, predicts which strategy will win, explains why, and then
-      lets you race the whole portfolio to check.</p>
+    <p class="lede">Worst-case bounds rank algorithms by type. This system looks at the <em>instance</em>.
+      Define your own problem (vertex cover, independent set or clique, with costs and constraints)
+      and watch it reduce the problem, predict the winning strategy, explain why, and race the whole
+      portfolio to check.</p>
   </div>
   <div class="mast-right">
     <button id="themeToggle" class="theme-toggle" aria-label="Switch theme" title="Switch between notebook and blueprint">
@@ -26,7 +27,7 @@
     </button>
   </div>
   <nav class="tabs" role="tablist" aria-label="Sections">
-    <button role="tab" class="tab" data-tab="play" aria-selected="true"><span class="sec">§1</span>Playground</button>
+    <button role="tab" class="tab" data-tab="play" aria-selected="true"><span class="sec">§1</span>Problem studio</button>
     <button role="tab" class="tab" data-tab="findings" aria-selected="false"><span class="sec">§2</span>Findings</button>
     <button role="tab" class="tab" data-tab="selector" aria-selected="false"><span class="sec">§3</span>The selector</button>
     <button role="tab" class="tab" data-tab="trap" aria-selected="false"><span class="sec">§4</span>Greedy's trap</button>
@@ -35,92 +36,157 @@
 </header>
 
 <main>
-<!-- ============================ §1 PLAYGROUND ============================ -->
+<!-- ============================ §1 STUDIO ============================ -->
 <section class="panel active" id="tab-play" role="tabpanel">
-  <div class="play-grid">
-    <aside class="controls card reveal" style="--d:0">
-      <h2 class="card-title">1 · Pick a graph</h2>
-      <div class="presets" id="presets"></div>
+  <div class="studio-grid">
+    <!-- ---------------- problem definition ---------------- -->
+    <aside class="card reveal define" style="--d:0">
+      <h2 class="card-title">1 · Define the problem</h2>
+      <div class="seg kind-seg" id="kindSeg" aria-label="Problem type"></div>
+      <p class="kind-def" id="kindDef"></p>
 
-      <details class="builder" id="builder">
-        <summary>Build your own</summary>
-        <label class="field">Family
-          <select id="family"></select>
-        </label>
-        <label class="field">Vertices <output id="nOut">80</output>
-          <input type="range" id="nRange" min="10" max="250" value="80">
-        </label>
+      <label class="field">Start from a scenario
+        <select id="scenario"><option value="">— choose a scenario —</option></select>
+      </label>
+      <p class="story" id="story" hidden></p>
+
+      <div class="toggle-row">
+        <label class="switch"><input type="checkbox" id="weighted"><span></span>Vertex costs / values</label>
+        <button class="btn ghost tiny-btn" id="randWeights" title="Random integer weights 1–10" disabled>Randomise</button>
+      </div>
+
+      <div class="input-tabs" id="inputTabs" role="tablist">
+        <button data-pane="draw" aria-selected="true">Draw</button>
+        <button data-pane="gen" aria-selected="false">Generate</button>
+        <button data-pane="text" aria-selected="false">Text</button>
+        <button data-pane="file" aria-selected="false">File</button>
+      </div>
+      <div class="pane" id="pane-draw">
+        <p class="tiny muted">Pick a tool, then work on the canvas. Keys: <kbd>S</kbd> select · <kbd>A</kbd> add · <kbd>C</kbd> connect · <kbd>X</kbd> erase · <kbd>Del</kbd> delete · <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo · <kbd>R</kbd> race.</p>
+        <div class="row">
+          <button class="btn ghost grow" id="relayout" title="Spring layout">Tidy layout</button>
+          <button class="btn ghost" id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+          <button class="btn ghost" id="redoBtn" title="Redo (Ctrl+Shift+Z)">↷</button>
+          <button class="btn ghost" id="clearBtn" title="Remove everything">Clear</button>
+        </div>
+      </div>
+      <div class="pane" id="pane-gen" hidden>
+        <div class="presets" id="presets"></div>
+        <label class="field">Family <select id="family"></select></label>
+        <label class="field">Vertices <output id="nOut">80</output><input type="range" id="nRange" min="10" max="250" value="80"></label>
         <div id="paramFields"></div>
         <div class="row">
           <label class="field grow">Seed <input type="number" id="seed" value="1" min="0"></label>
           <button class="btn ghost icon" id="dice" title="Random seed" aria-label="Random seed">⚄</button>
         </div>
-        <button class="btn primary wide" id="generate">Generate graph</button>
-      </details>
-
-      <details class="builder" id="paste">
-        <summary>Paste an edge list</summary>
-        <textarea id="edgeText" rows="6" spellcheck="false" placeholder="one edge per line, e.g.&#10;web db&#10;web cache&#10;db backup"></textarea>
-        <div class="row">
-          <button class="btn primary grow" id="parse">Analyse</button>
-          <label class="btn ghost" title="Load a .txt / .edgelist file">File…<input type="file" id="edgeFile" accept=".txt,.edgelist,.csv,.tsv" hidden></label>
-        </div>
-      </details>
-
-      <div class="feature-box">
-        <h3 class="mini-title">Measured structure</h3>
-        <dl class="features" id="featureList"><dd class="muted">—</dd></dl>
-        <p class="tiny muted" id="analysisTime"></p>
+        <button class="btn primary wide" id="generate">Generate</button>
       </div>
+      <div class="pane" id="pane-text" hidden>
+        <textarea id="defText" rows="9" spellcheck="false" placeholder="# one edge per line&#10;web db&#10;web cache&#10;db backup&#10;# optional vertex lines&#10;db: 8 require&#10;cache: 2&#10;backup: forbid"></textarea>
+        <div class="row">
+          <button class="btn primary grow" id="parseBtn">Load text</button>
+          <button class="btn ghost" id="toText" title="Write the current problem as text">From canvas</button>
+        </div>
+        <p class="tiny muted"><code>u v</code> edge · <code>name: 5</code> cost/value · add <code>require</code> or <code>forbid</code> to constrain a vertex.</p>
+      </div>
+      <div class="pane" id="pane-file" hidden>
+        <p class="tiny muted">Save or load a complete problem (graph, costs, constraints, positions) as JSON.</p>
+        <div class="row">
+          <button class="btn ghost grow" id="exportDef">Save .json</button>
+          <label class="btn ghost grow">Open…<input type="file" id="importDef" accept=".json,application/json" hidden></label>
+        </div>
+      </div>
+
+      <div class="inspector" id="inspector">
+        <h3 class="mini-title">Selected vertex</h3>
+        <p class="muted tiny" id="inspEmpty">Click a vertex to edit its name, cost and constraint.</p>
+        <div id="inspBody" hidden>
+          <label class="field">Name <input type="text" id="inspLabel" maxlength="40"></label>
+          <label class="field" id="inspWeightRow">Cost / value <input type="number" id="inspWeight" min="0.01" step="any"></label>
+          <div class="field">Constraint<div class="seg small" id="inspCons"></div></div>
+          <div class="row"><span class="tiny muted grow" id="inspDeg"></span><button class="btn ghost tiny-btn" id="inspDelete">Delete vertex</button></div>
+        </div>
+      </div>
+      <dl class="mini-stats" id="defStats"></dl>
     </aside>
 
+    <!-- ---------------- canvas ---------------- -->
     <div class="stage card reveal" style="--d:1">
       <div class="stage-head">
         <div>
           <h2 class="card-title">2 · The instance</h2>
-          <p class="stage-caption" id="graphCaption">Choose a preset to begin.</p>
+          <p class="stage-caption" id="graphCaption">Draw, generate, or pick a scenario.</p>
         </div>
-        <div class="legend-inline" id="graphLegend">
-          <span><i class="lg-node"></i>vertex</span>
-          <span><i class="lg-node in"></i>in cover</span>
+        <div class="tools" id="tools" role="toolbar" aria-label="Canvas tools">
+          <button data-tool="select" aria-pressed="true" title="Select and move (S)">⬚ Select</button>
+          <button data-tool="add" aria-pressed="false" title="Add vertices (A)">＋ Add</button>
+          <button data-tool="connect" aria-pressed="false" title="Drag between vertices to connect (C)">⟋ Connect</button>
+          <button data-tool="erase" aria-pressed="false" title="Erase vertices and edges (X)">⌫ Erase</button>
         </div>
       </div>
-      <div class="graph-wrap">
-        <svg id="graph" viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Graph drawing"></svg>
+      <div class="graph-wrap" id="graphWrap">
+        <svg id="graph" class="tool-select" viewBox="0 0 1000 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Problem graph editor"></svg>
         <div class="graph-tip" id="graphTip" hidden></div>
         <div class="empty-state" id="emptyState">
-          <p class="big">No graph yet.</p>
-          <p>Pick a preset on the left. Try <b>Geometric clusters</b> and then <b>Two-tier</b>: the verdict changes.</p>
+          <p class="big">An empty page.</p>
+          <p>Choose a <b>scenario</b> on the left, <b>generate</b> a graph, or take the <b>Add</b> tool and click here to start drawing.</p>
         </div>
+      </div>
+      <div class="legend-inline" id="graphLegend">
+        <span><i class="lg-node"></i>vertex</span>
+        <span><i class="lg-node in"></i><span id="lgSol">in solution</span></span>
+        <span><i class="lg-node req"></i>must choose</span>
+        <span><i class="lg-node forb"></i>must not</span>
       </div>
       <p class="cover-note" id="coverNote"></p>
     </div>
 
-    <aside class="verdict card reveal" style="--d:2">
-      <h2 class="card-title">3 · The verdict</h2>
+    <!-- ---------------- live analysis ---------------- -->
+    <aside class="card reveal analysis" style="--d:2" aria-live="polite">
+      <div class="an-head">
+        <h2 class="card-title">3 · Live analysis</h2>
+        <span class="an-status" id="anStatus">idle</span>
+      </div>
+      <div class="pipeline" id="pipeline"></div>
       <div class="seg" id="taskSeg" role="radiogroup" aria-label="Goal"></div>
       <p class="task-desc" id="taskDesc"></p>
-      <div class="verdict-body" id="verdictBody">
-        <p class="muted">The selector will explain its choice here.</p>
-      </div>
-      <div class="run-row">
-        <label class="field compact">Budget
-          <select id="budget"><option value="1">1 s</option><option value="3" selected>3 s</option><option value="8">8 s</option></select>
-        </label>
-        <button class="btn primary grow" id="runAll" disabled>Race all 7 algorithms ▸</button>
-      </div>
+      <div id="anBody"><p class="muted">The analysis updates as you edit the problem.</p></div>
     </aside>
   </div>
 
-  <section class="race card reveal" style="--d:3" id="raceCard" hidden>
+  <!-- ---------------- race ---------------- -->
+  <section class="race card reveal" style="--d:3" id="raceCard">
     <div class="race-head">
-      <h2 class="card-title">4 · The race <span class="muted">— every algorithm, same graph, same budget</span></h2>
+      <h2 class="card-title">4 · The race <span class="muted">— every selected algorithm on the same kernel, results stream in as they finish</span></h2>
       <p class="race-summary" id="raceSummary"></p>
     </div>
+    <div class="race-controls">
+      <div class="algo-toggles" id="algoToggles"></div>
+      <label class="field compact">Budget per algorithm
+        <select id="budget"><option value="1">1 s</option><option value="3" selected>3 s</option><option value="8">8 s</option><option value="20">20 s</option></select>
+      </label>
+      <button class="btn primary" id="raceBtn" disabled>Race ▸</button>
+      <button class="btn ghost" id="cancelBtn" hidden>Cancel</button>
+    </div>
     <div class="race-scale" id="raceScale"></div>
-    <ol class="race-list" id="raceList"></ol>
-    <p class="tiny muted">Bars use a log time scale. Click a row to draw that algorithm's cover on the graph. <b>Proved</b> = the algorithm certified optimality itself (exact search, or its cover matched its own lower bound).</p>
+    <ol class="race-list" id="raceList"><li class="race-empty muted">No race yet. Define a problem and press <b>Race</b> (or <kbd>R</kbd>).</li></ol>
+    <p class="tiny muted">Log time scale. Click a finished row to draw that algorithm's solution. <b>Proved</b> = the algorithm certified optimality itself. Skipped runs were predicted to be hopeless by a pre-flight check.</p>
   </section>
+
+  <div class="split-2 bottom-row">
+    <section class="card reveal" style="--d:4" id="solutionCard">
+      <h2 class="card-title">5 · Best solution</h2>
+      <div id="solutionBody"><p class="muted">Race the portfolio to get a verified solution.</p></div>
+    </section>
+    <section class="card reveal" style="--d:5">
+      <div class="race-head">
+        <h2 class="card-title">6 · Your runs</h2>
+        <button class="btn ghost tiny-btn" id="clearHistory">Clear</button>
+      </div>
+      <p class="hist-score" id="histScore"></p>
+      <div class="hist-wrap"><table class="hist" id="histTable"></table></div>
+    </section>
+  </div>
 </section>
 
 <!-- ============================ §2 FINDINGS ============================ -->
@@ -172,7 +238,7 @@
 <section class="panel" id="tab-selector" role="tabpanel">
   <div class="section-intro reveal">
     <h2 class="display">A decision tree trained on <em>regret</em>, not accuracy.</h2>
-    <p>Each split is chosen to minimise the total cost of the algorithm the tree would run, so a 50-second mistake counts 50 000× more than a 1 ms one. The path for the graph in your playground is traced in red.</p>
+    <p>Each split is chosen to minimise the total cost of the algorithm the tree would run, so a 50-second mistake counts 50 000× more than a 1 ms one. The path for the problem in your studio (its kernel, after reductions) is traced in red.</p>
   </div>
   <div class="card reveal tree-card" style="--d:1">
     <div class="tree-head">
@@ -253,6 +319,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script src="charts.js"></script>
+<script src="common.js"></script>
+<script src="studio.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

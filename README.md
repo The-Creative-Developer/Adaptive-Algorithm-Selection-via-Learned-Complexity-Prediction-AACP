@@ -58,21 +58,63 @@ sections:
 
 | § | section | what it shows |
 |---|---|---|
-| 1 | **Playground** | Pick a preset (or build or paste a graph). The selector's verdict comes with its decision path, drawn as number lines. Then race all 7 algorithms live, with *proved optimal* stamps, and click any row to draw that algorithm's cover. |
+| 1 | **Problem studio** | Define your own problem and get a live recommendation (details below). |
 | 2 | **Findings** | Interactive versions of the theory-vs-practice figures, with switchable x-axes and family filters. |
-| 3 | **The selector** | The learned regret tree, with your graph's path traced through it, and gap-closed results for every selector. |
+| 3 | **The selector** | The learned regret tree, with your problem's path traced through it, and gap-closed results for every selector. |
 | 4 | **Greedy's trap** | A step-by-step animation of greedy falling into Johnson's construction, and how a little noise breaks the trap. |
 | 5 | **Portfolio** | The textbook guarantee next to the measured performance for each algorithm. |
+
+### Problem studio: custom problems, live analysis
+
+**Defining the problem**
+- **Problem type:** *vertex cover*, *maximum independent set* or *maximum clique*. The
+  last two are solved by exact reduction to vertex cover: S is independent ⇔ V∖S is a
+  cover, and K is a clique ⇔ V∖K covers the complement graph. They therefore use the
+  whole portfolio (see `aacp/problems.py`).
+- **Costs and values:** optional per-vertex weights. Every algorithm has a weighted
+  version with the same guarantee (`aacp/algorithms/weighted.py`). Examples are
+  weighted greedy, Bar-Yehuda–Even local ratio, weighted König min-cut and a weighted
+  tree-decomposition DP.
+- **Constraints:** mark any vertex *must choose* or *must not*. These are applied as
+  exact pre-reductions that fix vertices and shrink the instance to a *kernel*.
+  Contradictory constraints are detected and explained.
+- **Input:** draw it in the graph editor (add / connect / erase tools, drag to move,
+  undo/redo, keyboard shortcuts), generate it from 8 structural families, write it as
+  text (`u v` edges, `name: 5 require` vertex lines), or open/save a `.json` file.
+- **Scenarios:**
+  - *network monitoring*
+  - *security patch plan* (weighted, with constraints)
+  - *exam timetable* (independent set)
+  - *team builder* (weighted clique)
+
+**Live analysis**, re-run on every edit:
+- The reduction pipeline: your problem → vertex cover → constraints → kernel.
+- **Three independent votes:**
+  - the regret tree, with its rule and leaf purity;
+  - an empirical-hardness runtime model, which predicts every algorithm's cost;
+  - the most similar benchmark graphs.
+- These are combined into a **consensus pick with a confidence score**.
+- Feature percentiles against the benchmark, and out-of-distribution warnings when
+  the model is extrapolating.
+
+**Race, solution and history**
+- **Streaming race:** results appear as each algorithm finishes. It can be cancelled,
+  you choose which algorithms take part, and a pre-flight guard skips hopeless DP runs.
+- **Verified solution:** checked against the *original* problem. It can be copied, or
+  exported as a JSON report or CSV race table.
+- **Run history:** shows how often the live pick actually won.
 
 There is a *Notebook / Blueprint* theme switch in the top-right corner.
 
 | | |
 |---|---|
-| ![Playground](docs/screenshots/playground.jpg) | ![Findings](docs/screenshots/findings.jpg) |
-| ![Selector, blueprint theme](docs/screenshots/selector-blueprint.jpg) | ![Greedy trap](docs/screenshots/trap.jpg) |
+| ![Problem studio](docs/screenshots/studio.jpg) | ![Studio, blueprint theme](docs/screenshots/studio-blueprint.jpg) |
+| ![Findings](docs/screenshots/findings.jpg) | ![Selector, blueprint theme](docs/screenshots/selector-blueprint.jpg) |
 
-Demo tips: *Geometric clusters* → `td_dp`, *Wide & clustered* → `ilp`, *Two-tier* →
-`nt_flow`, and *Hub-heavy* → `bnb`. In each case, hit **Race** to check the pick.
+Demo tips: in **Generate**, *Geometric clusters* → `td_dp`, *Two-tier* → `nt_flow`,
+and *Wide & clustered* → `ilp`; the *Team builder* scenario → `bnb`. Hit **Race** (or
+<kbd>R</kbd>) each time to check the pick. Then try adding a *must choose* constraint and
+watch the kernel shrink.
 
 ## Quick start
 
@@ -117,7 +159,10 @@ aacp/
   costtree.py      regret-minimising decision tree and forest
   analysis.py      theory-vs-practice analysis, figures, reports/results.md
   selector.py      deployable selector with explanations
-  web/             demo server (stdlib http.server) + static/ front end (vanilla JS/SVG, vendored fonts)
+  problems.py      custom problems: vertex cover / independent set / clique, weights, constraints -> kernel
+  algorithms/weighted.py  minimum-weight versions of all 7 algorithms + dispatcher
+  web/             demo server (stdlib http.server), live.py (analysis + race manager),
+                   scenarios.py, static/ front end (vanilla JS/SVG, vendored fonts)
 docs/screenshots/  demo screenshots
 tests/             brute-force correctness, LP half-integrality, flow, trap tightness, cost tree
 ```

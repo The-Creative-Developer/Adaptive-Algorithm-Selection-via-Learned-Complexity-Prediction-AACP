@@ -3,10 +3,13 @@
     python -m aacp serve [--port 8000] [--data data] [--open]
 
 JSON API
-  GET  /api/meta        portfolio, families + presets, tasks, selector trees
-  POST /api/generate    {family, n, seed, params}       -> graph payload
-  POST /api/parse       {text}  (edge list)             -> graph payload
-  POST /api/run         {n, edges, budget}              -> every algorithm's result
+  GET  /api/meta        portfolio, problem kinds, scenarios, families, presets, trees
+  POST /api/generate    {family, n, seed, params}       -> graph (+ layout)
+  POST /api/parse       {text}                          -> problem definition (+ layout)
+  POST /api/layout      {n, edges}                      -> layout
+  POST /api/analyze     problem definition              -> live analysis (reduction, votes, ...)
+  POST /api/race        problem + {algorithms, budget}  -> race job (runs in the background)
+  GET  /api/race/<id>   streaming status / results;   POST /api/race/<id>/cancel
   POST /api/trap        {k, noise, seed}                -> greedy-trap walkthrough
   GET  /api/findings    benchmark data behind the theory-vs-practice charts
   GET  /api/selection   selector evaluation table
@@ -38,6 +41,9 @@ from ..algorithms.greedy import greedy_order
 from ..algorithms.lp import ilp
 from ..features import compute_features
 from ..graphs import Spec, greedy_trap, make
+from ..problems import KINDS, ProblemError
+from .live import LiveModel, RaceManager
+from .scenarios import SCENARIOS
 
 STATIC = Path(__file__).parent / "static"
 MAX_NODES = 300
@@ -94,7 +100,14 @@ def _layout(G: nx.Graph) -> list[list[float]]:
     n = G.number_of_nodes()
     if n == 0:
         return []
-    pos = nx.spring_layout(G, seed=7, iterations=120 if n <= 150 else 60)
+    pos = None
+    if 2 < n <= 80 and nx.is_connected(G):
+        try:  # evenly spaced, readable labels for the small hand-made problems
+            pos = nx.kamada_kawai_layout(G)
+        except Exception:  # pragma: no cover
+            pos = None
+    if pos is None:
+        pos = nx.spring_layout(G, seed=7, iterations=120 if n <= 150 else 60)
     xy = np.array([pos[v] for v in range(n)])
     lo, hi = xy.min(axis=0), xy.max(axis=0)
     span = np.where(hi - lo > 1e-9, hi - lo, 1.0)
@@ -108,26 +121,10 @@ class App:
         self.data = S.load(self.datadir)
         self.trees = {t: S.fit_cost_tree(self.data, t, "structural", depth=3)[0]
                       for t in DEMO_TASKS}
-        self.lock = threading.Lock()
+        self.live = LiveModel(self.data, self.trees)
+        self.races = RaceManager(MAX_NODES)
 
     # ---------------------------------------------------------------- graphs
-    def graph_payload(self, G: nx.Graph, source: dict) -> dict:
-        n = G.number_of_nodes()
-        if n > MAX_NODES:
-            raise ValueError(f"graph has {n} vertices; the demo accepts at most {MAX_NODES}")
-        t0 = time.perf_counter()
-        feats = compute_features(G)
-        sel = {}
-        for task, tree in self.trees.items():
-            x = np.array([float(feats[c]) for c in tree.feature_names_])
-            sel[task] = tree.trace(x)
-        return {
-            "source": source, "n": n, "m": G.number_of_edges(),
-            "edges": [[int(u), int(v)] for u, v in G.edges()],
-            "layout": _layout(G), "features": feats, "selection": sel,
-            "analysis_ms": 1000 * (time.perf_counter() - t0),
-        }
-
     def generate(self, body: dict) -> dict:
         fam = body.get("family", "er")
         if fam not in FAMILIES:
@@ -146,63 +143,81 @@ class App:
         if fam == "sbm":
             params["blocks"] = min(params["blocks"], n // 3)
         G = make(Spec(fam, n, tuple(sorted(params.items())), seed))
-        return self.graph_payload(G, {"kind": "generated", "family": fam, "n": n,
-                                      "seed": seed, "params": params})
+        return {"source": {"kind": "generated", "family": fam, "n": n, "seed": seed, "params": params},
+                "n": n, "edges": [[int(u), int(v)] for u, v in G.edges()], "layout": _layout(G)}
 
-    def parse(self, body: dict) -> dict:
-        text = str(body.get("text", ""))
-        if len(text) > 2_000_000:
-            raise ValueError("edge list too large")
-        G = nx.Graph()
-        for line in text.splitlines():
-            line = line.split("#", 1)[0].replace(",", " ").replace(";", " ").strip()
-            if not line:
-                continue
-            tok = line.split()
-            if len(tok) == 1:
-                G.add_node(tok[0])
-            else:
-                if tok[0] != tok[1]:
-                    G.add_edge(tok[0], tok[1])
-        if G.number_of_nodes() == 0:
-            raise ValueError("no edges found: use one 'u v' pair per line")
-        names = sorted(G.nodes(), key=lambda s: (len(s), s))
-        H = nx.relabel_nodes(G, {v: i for i, v in enumerate(names)})
-        H = nx.convert_node_labels_to_integers(H, ordering="sorted")
-        return self.graph_payload(H, {"kind": "uploaded", "labels": names})
-
-    # ------------------------------------------------------------------- run
-    def run(self, body: dict) -> dict:
-        n = int(body["n"])
-        if n > MAX_NODES:
-            raise ValueError("graph too large")
+    def layout(self, body: dict) -> dict:
+        n = int(body.get("n", 0))
+        if not 0 < n <= MAX_NODES:
+            raise ValueError(f"layout needs 1..{MAX_NODES} vertices")
         G = nx.Graph()
         G.add_nodes_from(range(n))
-        G.add_edges_from((int(u), int(v)) for u, v in body.get("edges", []))
-        budget = float(np.clip(float(body.get("budget", 3.0)), 0.1, 20.0))
-        results = []
-        for name, (fn, *_r) in PORTFOLIO.items():
-            t0 = time.perf_counter()
-            try:
-                R = fn(G, Deadline(budget))
-                status = "ok"
-            except Timeout:
-                R, status = None, "timeout"
-            t = time.perf_counter() - t0
-            row = {"algorithm": name, "status": status, "time_ms": 1000 * t}
-            if R is not None:
-                assert is_vertex_cover(G, R.cover)
-                row.update(size=len(R.cover), proved=bool(R.proved_optimal), ops=R.ops,
-                           cover=sorted(int(v) for v in R.cover),
-                           lower_bound=R.lower_bound)
-            results.append(row)
-        proved = [r["size"] for r in results if r.get("proved")]
-        opt = min(proved) if proved else None
-        best = min((r["size"] for r in results if "size" in r), default=None)
-        for r in results:
-            if "size" in r and (opt or best):
-                r["ratio"] = r["size"] / (opt or best)
-        return {"results": results, "opt": opt, "best": best, "budget": budget}
+        G.add_edges_from((int(u), int(v)) for u, v in body.get("edges", []) if int(u) != int(v))
+        return {"layout": _layout(G)}
+
+    def parse(self, body: dict) -> dict:
+        """Text format, one item per line ('#' starts a comment):
+             a b        an edge (also 'a,b' or 'a - b')
+             a: 5       vertex weight
+             a: 5 require | a: forbid | a:   weight / constraint / isolated vertex"""
+        text = str(body.get("text", ""))
+        if len(text) > 2_000_000:
+            raise ValueError("input too large")
+        order, idx, edges, weights, require, forbid = [], {}, set(), {}, set(), set()
+
+        def vid(name):
+            if name not in idx:
+                idx[name] = len(order)
+                order.append(name)
+            return idx[name]
+
+        for no, raw in enumerate(text.splitlines(), 1):
+            line = raw.split("#", 1)[0].strip()
+            if not line:
+                continue
+            if ":" in line:
+                name, rest = line.split(":", 1)
+                v = vid(name.strip())
+                for tok in rest.replace(",", " ").split():
+                    t = tok.lower()
+                    if t in ("require", "required", "must", "in"):
+                        require.add(v)
+                    elif t in ("forbid", "forbidden", "never", "out"):
+                        forbid.add(v)
+                    else:
+                        try:
+                            wv = float(tok)
+                        except ValueError:
+                            raise ValueError(f"line {no}: cannot read {tok!r} (use a number, 'require' or 'forbid')")
+                        if not wv > 0:
+                            raise ValueError(f"line {no}: weights must be positive")
+                        weights[v] = wv
+                continue
+            tok = line.replace(",", " ").replace(" - ", " ").replace(";", " ").split()
+            if len(tok) == 1:
+                vid(tok[0])
+            elif len(tok) == 2:
+                a, b = vid(tok[0]), vid(tok[1])
+                if a != b:
+                    edges.add((min(a, b), max(a, b)))
+            else:
+                raise ValueError(f"line {no}: expected 'u v' for an edge or 'name: weight' for a vertex")
+        if not order:
+            raise ValueError("nothing to read: write one edge 'u v' per line")
+        if len(order) > MAX_NODES:
+            raise ValueError(f"{len(order)} vertices: the studio accepts at most {MAX_NODES}")
+        n = len(order)
+        E = sorted(edges)
+        G = nx.Graph(); G.add_nodes_from(range(n)); G.add_edges_from(E)
+        return {"n": n, "labels": order, "edges": [list(e) for e in E],
+                "weights": [weights.get(v, 1.0) for v in range(n)] if weights else None,
+                "require": sorted(require), "forbid": sorted(forbid), "layout": _layout(G)}
+
+    def analyze(self, body: dict) -> dict:
+        return self.live.analyze(body, MAX_NODES)
+
+    def race(self, body: dict) -> dict:
+        return self.races.start(body)
 
     # ------------------------------------------------------------------ trap
     def trap(self, body: dict) -> dict:
@@ -287,6 +302,7 @@ class App:
     def meta(self) -> dict:
         return _clean({
             "algorithms": ALGO_INFO, "families": FAMILIES, "presets": PRESETS,
+            "kinds": KINDS, "scenarios": SCENARIOS,
             "tasks": list(DEMO_TASKS), "max_nodes": MAX_NODES,
             "trees": {t: tr.to_dict() for t, tr in self.trees.items()},
             "budget_ms": S.TAU * 1000,
@@ -298,9 +314,15 @@ def make_handler(app: App):
     class Handler(BaseHTTPRequestHandler):
         server_version = "AACP/0.1"
 
-        def log_message(self, fmt, *args):  # quieter console
-            if not str(args[0]).startswith(("GET /static", "GET /fonts")):
+        def log_message(self, fmt, *args):  # quieter console: skip assets and race polling
+            if not str(args[0]).startswith(("GET /static", "GET /fonts", "GET /api/race/")):
                 super().log_message(fmt, *args)
+
+        def handle_one_request(self):
+            try:
+                super().handle_one_request()
+            except (BrokenPipeError, ConnectionResetError):
+                pass  # the browser navigated away mid-response
 
         def _send(self, code, body: bytes, ctype: str):
             self.send_response(code)
@@ -323,6 +345,10 @@ def make_handler(app: App):
                     return self._json(app.findings())
                 if path == "/api/selection":
                     return self._json(app.selection())
+                if path.startswith("/api/race/"):
+                    return self._json(app.races.get(path.rsplit("/", 1)[1]))
+            except ProblemError as e:
+                return self._json({"error": str(e)}, 404)
             except Exception as e:  # pragma: no cover
                 return self._json({"error": str(e)}, 500)
             rel = "index.html" if path in ("/", "") else path.lstrip("/")
@@ -338,8 +364,12 @@ def make_handler(app: App):
 
         def do_POST(self):
             routes = {"/api/generate": app.generate, "/api/parse": app.parse,
-                      "/api/run": app.run, "/api/trap": app.trap}
+                      "/api/layout": app.layout, "/api/analyze": app.analyze,
+                      "/api/race": app.race, "/api/trap": app.trap}
             fn = routes.get(self.path)
+            if fn is None and self.path.startswith("/api/race/") and self.path.endswith("/cancel"):
+                jid = self.path.split("/")[3]
+                fn = lambda _body: app.races.cancel(jid)
             if fn is None:
                 return self._json({"error": "not found"}, 404)
             try:
@@ -348,7 +378,7 @@ def make_handler(app: App):
                     raise ValueError("request too large")
                 body = json.loads(self.rfile.read(length) or b"{}")
                 return self._json(fn(body))
-            except (ValueError, KeyError, TypeError) as e:
+            except (ValueError, KeyError, TypeError) as e:  # ProblemError is a ValueError
                 return self._json({"error": str(e)}, HTTPStatus.BAD_REQUEST)
             except Exception as e:  # pragma: no cover
                 return self._json({"error": f"{type(e).__name__}: {e}"}, 500)
