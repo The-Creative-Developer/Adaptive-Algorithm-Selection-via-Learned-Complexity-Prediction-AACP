@@ -35,7 +35,7 @@ def _incidence(G: nx.Graph):
     return n, m, A
 
 
-def ilp(G: nx.Graph, deadline: Deadline | None = None) -> Result:
+def ilp(G: nx.Graph, deadline: Deadline | None = None, weights=None) -> Result:
     deadline = deadline or Deadline(None)
     n, m, A = _incidence(G)
     if m == 0:
@@ -46,7 +46,8 @@ def ilp(G: nx.Graph, deadline: Deadline | None = None) -> Result:
     opts = {"disp": False}
     if math.isfinite(tl):
         opts["time_limit"] = tl
-    res = milp(c=np.ones(n), constraints=LinearConstraint(A, lb=1, ub=np.inf),
+    c = np.ones(n) if weights is None else np.asarray([float(weights[v]) for v in range(n)])
+    res = milp(c=c, constraints=LinearConstraint(A, lb=1, ub=np.inf),
                integrality=np.ones(n), bounds=Bounds(0, 1), options=opts)
     if res.status != 0 or res.x is None:
         raise Timeout(f"milp status {res.status}: {res.message}")
@@ -57,20 +58,28 @@ def ilp(G: nx.Graph, deadline: Deadline | None = None) -> Result:
                   extra={"mip_nodes": nodes})
 
 
-def solve_lp(G: nx.Graph) -> np.ndarray:
+def solve_lp(G: nx.Graph, weights=None) -> np.ndarray:
     n, m, A = _incidence(G)
     if m == 0:
         return np.zeros(n)
-    res = linprog(np.ones(n), A_ub=-A, b_ub=-np.ones(m), bounds=(0, 1),
+    c = np.ones(n) if weights is None else np.asarray([float(weights[v]) for v in range(n)])
+    res = linprog(c, A_ub=-A, b_ub=-np.ones(m), bounds=(0, 1),
                   method="highs-ds")
     if res.status != 0:
         raise RuntimeError(res.message)
     return res.x
 
 
-def lp_round(G: nx.Graph, deadline: Deadline | None = None) -> Result:
-    x = solve_lp(G)
+def lp_round(G: nx.Graph, deadline: Deadline | None = None, weights=None) -> Result:
+    x = solve_lp(G, weights)
     cover = {int(i) for i in np.nonzero(x >= 0.5 - 1e-7)[0]}
+    if weights is not None:
+        c = np.asarray([float(weights[v]) for v in range(len(x))])
+        lp_val = float(c @ x)
+        cw = float(sum(c[v] for v in cover))
+        return Result(cover=cover, proved_optimal=cw <= lp_val + 1e-7, lower_bound=lp_val,
+                      ops=G.number_of_edges(),
+                      extra={"lp_value": lp_val, "n_half": int(np.sum(np.abs(x - 0.5) < 1e-6))})
     lp_val = float(x.sum())
     half = int(np.sum(np.abs(x - 0.5) < 1e-6))
     lb = math.ceil(lp_val - 1e-7)

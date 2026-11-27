@@ -52,8 +52,17 @@ def _pack(masks: np.ndarray, positions: list[int]) -> np.ndarray:
     return key
 
 
+def _mask_weight(masks: np.ndarray, wts: list[float]) -> np.ndarray:
+    out = np.zeros(len(masks), dtype=np.float64)
+    for i, w in enumerate(wts):
+        out += w * ((masks >> i) & 1)
+    return out
+
+
 def td_dp(G: nx.Graph, deadline: Deadline | None = None,
-          max_states: int = MAX_STATES) -> Result:
+          max_states: int = MAX_STATES, weights=None) -> Result:
+    """``weights`` (indexable by vertex) switches to minimum-*weight* cover;
+    with ``None`` the original cardinality code path runs unchanged."""
     deadline = deadline or Deadline(None)
     if G.number_of_edges() == 0:
         return Result(cover=set(), proved_optimal=True, extra={"width": 0})
@@ -100,7 +109,10 @@ def td_dp(G: nx.Graph, deadline: Deadline | None = None,
         idx = {v: i for i, v in enumerate(vs)}
         b = len(vs)
         masks = np.arange(1 << b, dtype=np.int64)
-        f = _popcount(masks).astype(np.float64)
+        if weights is None:
+            f = _popcount(masks).astype(np.float64)
+        else:
+            f = _mask_weight(masks, [float(weights[v]) for v in vs])
         valid = np.ones(1 << b, dtype=bool)
         for u in vs:
             for w in H[u]:
@@ -118,7 +130,10 @@ def td_dp(G: nx.Graph, deadline: Deadline | None = None,
         if p is not None:
             inter = sorted(set(t) & set(p))
             key = _pack(masks, [idx[v] for v in inter])
-            adj_f = f - _popcount(key)
+            if weights is None:
+                adj_f = f - _popcount(key)
+            else:
+                adj_f = f - _mask_weight(key, [float(weights[v]) for v in inter])
             g = np.full(1 << len(inter), np.inf)
             np.minimum.at(g, key, adj_f)
             g_of[t] = g
@@ -145,5 +160,8 @@ def td_dp(G: nx.Graph, deadline: Deadline | None = None,
         for i, v in enumerate(verts[t]):
             if (s >> i) & 1:
                 cover.add(v)
-    assert len(cover) == int(total), (len(cover), total)
+    if weights is None:
+        assert len(cover) == int(total), (len(cover), total)
+    else:
+        assert abs(sum(float(weights[v]) for v in cover) - total) < 1e-6 * max(1.0, total)
     return Result(cover=cover, proved_optimal=True, ops=states, extra=extra)
