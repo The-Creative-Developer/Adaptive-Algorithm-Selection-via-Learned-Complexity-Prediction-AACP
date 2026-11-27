@@ -34,6 +34,15 @@ We find three things:
    no selection at all. Learned selectors, however, do not transfer reliably to graph
    families absent from training.
 
+We also turn the selector into a tool (§6). A **Problem Studio** accepts custom problems:
+vertex cover, maximum independent set or maximum clique, with vertex costs and
+must-choose / must-not constraints. It solves them by exact reduction to weighted vertex
+cover, and recommends an algorithm live from three votes: the regret tree, a runtime
+model and the nearest benchmark graphs. On 68 fresh problems, the live consensus closes
+99.96% of the gap to a per-problem oracle on the "prove optimal" goal, with no failed
+picks. All of its errors occur on weighted problems, which the unit-cost training data
+does not cover.
+
 ---
 
 ## 1. Problem and portfolio
@@ -364,7 +373,175 @@ not on family-specific structure.
 Practical implication: a deployed selector needs training data that covers the target
 distribution, or a fallback to the SBS when an instance is out of distribution.
 
-## 6. Threats to validity
+## 6. From study to tool: the Problem Studio
+
+The selector is only useful if someone can hand it *their* problem. The interactive demo
+(`python -m aacp serve`) therefore includes a **Problem Studio**. In it you define a
+custom problem, by drawing, generating, writing text or loading JSON. The system then
+reduces the problem, recommends an algorithm live with an explanation, races the
+portfolio, and verifies the result. This section describes the design and evaluates the
+live recommendation on problems that are not in the benchmark.
+
+### 6.1 Custom problems by exact reduction (`aacp/problems.py`)
+
+Three problem types are supported, each with optional vertex weights:
+
+| problem | objective | reduction to (weighted) vertex cover |
+|---|---|---|
+| vertex cover | min w(C), every edge touched | none |
+| maximum independent set | max w(S), no edge inside S | S independent ⇔ V∖S is a cover, so the best S is V minus a minimum cover |
+| maximum clique | max w(K), K pairwise adjacent | K is a clique of G ⇔ K is independent in the complement Ḡ ⇔ V∖K covers Ḡ |
+
+These are the textbook NP-completeness reductions, run forwards as solvers. Weights
+carry over because w(S) = w(V) − w(C). As a result, the whole portfolio, and the whole
+learned selector, applies to all three problems without modification.
+
+**Constraints as kernelisation.**
+- Users mark vertices *must choose* or *must not*, in terms of their own problem.
+  These are translated into cover constraints and applied as exact pre-reductions:
+  - a vertex forced into the cover is deleted and paid for;
+  - a vertex forced out forces all its neighbours in, and is then deleted.
+- What remains is the **kernel**, the only part a solver actually has to decide.
+  Constraints can shrink it dramatically. In the *team builder* scenario, requiring one
+  person reduces a 16-vertex clique problem to a 6-vertex kernel. In the *security
+  patch plan*, one required and one forbidden host reduce 16 vertices and 22 edges to
+  11 and 10.
+- The only way constraints can contradict each other is two adjacent cover-forbidden
+  vertices (or the equivalent for the other problems). This is detected and reported
+  in the user's terms, e.g. "infeasible: a and b are both required in the set, but they
+  are adjacent".
+- In a brute-force test of 300 random problems, no feasible problem was ever rejected.
+
+**Verification.** Every solution is mapped back to the original problem and re-verified
+from scratch (every edge, every constraint) before it is shown. It is never trusted
+from the kernel alone.
+
+### 6.2 A weighted portfolio (`aacp/algorithms/weighted.py`)
+
+Every algorithm got a minimum-*weight* version with the same paradigm and guarantee:
+
+| algorithm | weighted version | guarantee |
+|---|---|---|
+| `td_dp` | bag tables store weight sums instead of cardinalities | exact |
+| `bnb` | weighted reductions (leaf rule if w(v) ≥ w(u); triangle rule if w(v) ≥ max of its neighbours; Buss-style forcing) and a local-ratio lower bound | exact |
+| `ilp` | weighted objective | exact |
+| `greedy` | take argmax deg(v)/w(v) (set-cover greedy) | ≤ H(Δ) |
+| `matching` | Bar-Yehuda–Even local ratio (identical to Gavril when w = 1) | ≤ 2 |
+| `lp_round` | weighted LP, half-integral vertex rounding | ≤ 2 |
+| `nt_flow` | weighted König min-cut on bipartite graphs; weighted Nemhauser–Trotter (min-cut on the bipartite double cover) otherwise | exact if bipartite, else ≤ 2 |
+
+All seven were checked against brute force on random weighted graphs: exactness, valid
+lower bounds and the 2-approximation guarantees. Unit-weight problems still dispatch
+to the original, benchmarked code paths, so §§4–5 remain reproducible bit for bit.
+
+### 6.3 Live analysis: three votes and a consensus (`aacp/web/live.py`)
+
+On every edit (debounced), the Studio reduces the problem and analyses the **kernel**.
+It then asks three independent models, each trained on the 648-graph benchmark:
+
+1. **Regret tree** (§5.3). It gives its rule path and the *leaf purity*: how often its
+   choice actually won among the training graphs in that leaf.
+2. **Empirical hardness model.** One random forest per algorithm predicts that
+   algorithm's cost from structural features, and the cheapest prediction is the vote.
+   It is trained in a background thread at server start-up, in about 8 s.
+3. **Nearest benchmark graphs.** The vote is the majority winner among the 5 nearest
+   training graphs in z-scored (partly log-transformed) feature space.
+
+The consensus is the majority vote, with ties going to the tree. Its *confidence* is
+0.65 × (vote agreement) + 0.35 × (leaf purity). This is multiplied by 0.75 when any
+feature lies outside the benchmark's range, and by 0.85 when vertex costs vary, since
+all three models were trained on unit costs. This formula is a hand-set heuristic, not
+a calibrated probability. §6.4 tests how informative it is.
+
+The panel also shows:
+- the reduction pipeline (problem → vertex cover → constraints → kernel);
+- predicted costs for all seven algorithms;
+- the tree's path, drawn as number lines;
+- the nearest benchmark graphs;
+- feature percentiles, with warnings when the model is extrapolating.
+
+### 6.4 Evaluation on fresh custom problems
+
+I evaluated the live recommendation on **68 problems that are not in the benchmark**
+(`scripts/evaluate_studio.py`, results in `reports/studio_eval.json`):
+- the 8 demo presets, each generated with 2 new seeds;
+- each posed as vertex cover and as maximum clique;
+- each with unit weights and with random integer weights 1–10;
+- plus the 4 demo scenarios.
+
+For each problem, all seven algorithms were raced with a 3 s budget. Every vote was then
+compared with the actual winner, by accuracy and by PAR10 regret. Following §5.2,
+regret is the metric that matters.
+
+**Goal "prove optimal"** (66 problems with a certified winner; both *dense & hard*
+vertex-cover instances had none within 3 s):
+
+| policy | picks the winner | mean PAR10 time | failed picks (PAR10 penalty) |
+|---|---|---|---|
+| always `bnb` (the benchmark's single best solver) | 63.6% | 5.554 s | 12 |
+| similar-graphs vote | 83.3% | 0.564 s | 1 |
+| runtime-model vote | 86.4% | 1.009 s | 2 |
+| regret-tree vote | 89.4% | 0.100 s | 0 |
+| **consensus** | **92.4%** | **0.099 s** | **0** |
+| oracle (per-problem winner) | 100% | 0.097 s | 0 |
+
+The consensus closes **99.96%** of the gap between always running `bnb` and the
+oracle. Combining the votes helps accuracy over the best single vote, the tree, by 3
+points. The regret improvement over the tree alone is negligible: the tree already
+avoids every catastrophic pick.
+
+**Goal "fastest optimum"** (68 problems): the consensus picks the winner 67.6% of the
+time, against 39.7% for always running `bnb`. It closes 85.7% of the gap (mean PAR10
+time 0.98 s vs 6.27 s; oracle 0.09 s). Accuracy is lower here because many races are
+decided by sub-millisecond differences between `greedy` and `bnb` when both reach the
+optimum. Most of the remaining regret comes from 2 failed picks.
+
+**Where it errs.**
+- **Weights cause every miss.** All five "prove optimal" misses are *weighted*
+  problems. Accuracy is 100% on all 34 unit-cost problems, 94% on weighted cliques
+  and 73% on weighted vertex covers.
+- **The max-flow method wins more on weighted problems.** In 3 of the 5 misses the
+  winner was `nt_flow`, which on those problems certified optimality itself. A
+  plausible explanation, *untested here*, is that random weights break the symmetries
+  that make the vertex-cover LP half-integral. A unique, integral LP optimum lets the
+  flow-based LP method certify its answer. The unit-cost training data cannot show
+  this effect.
+- **The out-of-distribution flag did not predict errors.** It fired on 35 problems,
+  mostly cliques, whose complements are much denser than any benchmark graph, yet
+  accuracy there was 97%. The cost-variation flag is the informative one.
+- **Confidence is informative for one goal only.** For "prove optimal", picks with
+  confidence ≥ 0.6 were right 95% of the time (n = 60), against 67% below it (n = 6).
+  For "fastest optimum" the score is uninformative: 67% vs 68%.
+
+**Caveats.**
+- These problems come from the same 8 generator families as the training data (with
+  new seeds, sizes and problem kinds). They are closer to the 5-fold CV setting of §5.1
+  than to leave-one-family-out (§5.5), which remains the honest estimate for genuinely
+  new kinds of graphs.
+- Wall-clock races vary between runs: a second run of the same 68 problems moved
+  accuracy by about 1.5 points.
+
+### 6.5 Engineering for robustness
+
+- **Streaming, cancellable races.** Races run as background jobs and the client polls
+  them, so results appear as each algorithm finishes. Each race has its own deadline
+  and cancel flag, and at most 2 races run at once. Cancellation stops cooperative
+  solvers within milliseconds. It cannot interrupt a HiGHS solve or the DP's min-fill
+  decomposition step, which stop at their time limit instead.
+- **Pre-flight guard.** `td_dp` is skipped, with the reason shown, when the cheap
+  treewidth bound exceeds 32, where its 2^tw table cannot fit the state budget (§4.1).
+- **Input validation.** Size limits, positive finite weights, conflicting constraints
+  and complement-graph size are checked, all with readable errors. Static files are
+  protected against path traversal, and user-supplied labels are HTML-escaped.
+- **Testing.**
+  - 35 automated tests, including brute-force checks of every weighted algorithm and
+    every problem reduction, and server tests for analysis, streaming, cancellation and
+    parsing.
+  - A 21-step headless-browser walkthrough of the Studio. This walkthrough found two
+    UI bugs, both now fixed: an overlay that blocked clicks on an empty canvas, and a
+    header reflow that moved the canvas under the cursor while drawing.
+
+## 7. Threats to validity
 
 - **Implementation constant factors.** HiGHS (ILP/LP) is compiled C++; everything else
   is Python. Wall-clock labels therefore reflect *these implementations*. This is why
@@ -381,8 +558,14 @@ distribution, or a fallback to the SBS when an instance is out of distribution.
 - **Unknown OPT.** 20 instances have no proven optimum. They are excluded from the
   OPT-based tasks but kept in `certified`, where no solver succeeds on them, so they
   are labelled `unsolved` and excluded from classifier training.
+- **Studio evaluation (§6.4).**
+  - The 68 problems reuse the training generator families, so they are not a test of
+    transfer to new kinds of graphs.
+  - The confidence formula is hand-set rather than learned.
+  - The selector has never seen a weighted instance. The weighted results measure how
+    far unit-cost structure carries over, not a model trained for weights.
 
-## 7. Future work
+## 8. Future work
 
 - **LP-bounded B&B.** Replace the matching bound with the NT/LP bound and test the
   §4.2 prediction that the search-tree size should then scale with k − LP\*.
@@ -393,9 +576,18 @@ distribution, or a fallback to the SBS when an instance is out of distribution.
   König/NT methods win on two-tier (bipartite) topologies. Validating on real attack
   graphs (e.g. generated with MulVAL) is a natural paper extension.
 - **Out-of-distribution detection.** Detect when an instance lies outside the
-  training families and fall back to the SBS, motivated by §5.5.
+  training families and fall back to the SBS, motivated by §5.5. The Studio's
+  feature-range check (§6.4) proved a poor error predictor. A density-based detector,
+  e.g. distance to the k-th nearest benchmark graph, is the natural next step.
+- **Weighted training data.** Benchmark weighted instances and add weight-distribution
+  features (e.g. weight CV, weight–degree correlation). This would test the §6.4
+  hypothesis that random weights favour the flow-based LP method by making the LP
+  relaxation integral more often.
+- **Learned confidence.** Replace the hand-set consensus confidence with a calibrated
+  probability, e.g. a classifier predicting "the pick will be within 10% of the
+  oracle".
 
-## 8. Reproduce
+## 9. Reproduce
 
 ```bash
 pip install -r requirements.txt
@@ -411,4 +603,12 @@ python -m aacp benchmark --scale 2 --budget 5 --jobs 3
 
 ```bash
 python -m aacp analyze
+```
+
+```bash
+python scripts/evaluate_studio.py
+```
+
+```bash
+python -m aacp serve --open
 ```
