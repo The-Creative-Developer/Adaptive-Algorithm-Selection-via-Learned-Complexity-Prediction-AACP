@@ -1,0 +1,5701 @@
+{
+ "summary": {
+  "certified": {
+   "n": 66,
+   "consensus": 0.9242424242424242,
+   "tree": 0.8939393939393939,
+   "ehm": 0.8636363636363636,
+   "knn": 0.8333333333333334,
+   "always_bnb": 0.6363636363636364,
+   "consensus_unit": 1.0,
+   "consensus_weighted": 0.84375,
+   "hi_conf_n": 60,
+   "hi_conf_acc": 0.95,
+   "lo_conf_n": 6,
+   "lo_conf_acc": 0.6666666666666666,
+   "winner_dist": {
+    "greedy": 0,
+    "matching": 0,
+    "nt_flow": 7,
+    "lp_round": 0,
+    "bnb": 42,
+    "td_dp": 8,
+    "ilp": 9
+   },
+   "mean_cost": {
+    "consensus": 0.09894259701515425,
+    "tree": 0.10051112604545862,
+    "ehm": 1.0085916939697002,
+    "knn": 0.5643387980757623
+   },
+   "mean_cost_always_bnb": 5.554128109469702,
+   "mean_cost_oracle": 0.09681295777272982,
+   "failures": {
+    "consensus": 0,
+    "tree": 0,
+    "ehm": 2,
+    "knn": 1,
+    "always_bnb": 12
+   },
+   "gap_closed_consensus": 0.9996097642919225
+  },
+  "optimum": {
+   "n": 68,
+   "consensus": 0.6764705882352942,
+   "tree": 0.6617647058823529,
+   "ehm": 0.6176470588235294,
+   "knn": 0.6029411764705882,
+   "always_bnb": 0.39705882352941174,
+   "consensus_unit": 0.7352941176470589,
+   "consensus_weighted": 0.6176470588235294,
+   "hi_conf_n": 43,
+   "hi_conf_acc": 0.6744186046511628,
+   "lo_conf_n": 25,
+   "lo_conf_acc": 0.68,
+   "winner_dist": {
+    "greedy": 18,
+    "matching": 0,
+    "nt_flow": 6,
+    "lp_round": 0,
+    "bnb": 27,
+    "td_dp": 8,
+    "ilp": 9
+   },
+   "mean_cost": {
+    "consensus": 0.9783854618088261,
+    "tree": 0.9799069714117683,
+    "ehm": 1.8612801735588267,
+    "knn": 1.4300927317352983
+   },
+   "mean_cost_always_bnb": 6.273124341544123,
+   "mean_cost_oracle": 0.09194418936764868,
+   "failures": {
+    "consensus": 2,
+    "tree": 2,
+    "ehm": 4,
+    "knn": 3,
+    "always_bnb": 14
+   },
+   "gap_closed_consensus": 0.8565902868679455
+  }
+ },
+ "scenarios": [
+  {
+   "name": "Network monitoring",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 20,
+   "kernel_n": 20,
+   "kernel_m": 29,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 7.622600003287516e-05,
+     "w": 11.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 7.250099997690995e-05,
+     "w": 16.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00037021700001105273,
+     "w": 11.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003128472000014426,
+     "w": 17.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00010846899999705784,
+     "w": 10.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.0016562220000082561,
+     "w": 10.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.008537295999985872,
+     "w": 10.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9710344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8117241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Security patch plan",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 16,
+   "kernel_n": 11,
+   "kernel_m": 10,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 7.680199996684678e-05,
+     "w": 12.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 5.665900005169533e-05,
+     "w": 18.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00022056199998132797,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004241870000043946,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00013171699998792974,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.0013681389999646854,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.013768795000032696,
+     "w": 12.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6190344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.3793491379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "greedy",
+    "ood": true
+   }
+  },
+  {
+   "name": "Exam timetable slot",
+   "kind": "independent_set",
+   "weighted": false,
+   "n": 16,
+   "kernel_n": 16,
+   "kernel_m": 25,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 8.599000000231172e-05,
+     "w": 10.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 5.449000002499815e-05,
+     "w": 14.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00044232599998395017,
+     "w": 10.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0030721960000050785,
+     "w": 16.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0003372110000441353,
+     "w": 9.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.00211502100000871,
+     "w": 9.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.010175214000014421,
+     "w": 9.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Team builder",
+   "kind": "clique",
+   "weighted": true,
+   "n": 16,
+   "kernel_n": 6,
+   "kernel_m": 6,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 4.302799999322815e-05,
+     "w": 7.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 2.862000002323839e-05,
+     "w": 14.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 6.453800000372212e-05,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0029454470000018773,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00010329100001627012,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.000615075999974124,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.001510152999969705,
+     "w": 7.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.56684375,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.4766843220338983,
+    "tree": "greedy",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  }
+ ],
+ "rows": [
+  {
+   "name": "Sparse random s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 119,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00020926700000245546,
+     "w": 41.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0001065210000206207,
+     "w": 62.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.001874219000001176,
+     "w": 41.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004401328000000149,
+     "w": 58.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0005746010000109436,
+     "w": 40.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.009184844000003523,
+     "w": 40.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.008821616999995285,
+     "w": 40.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9710344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8117241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Sparse random s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 119,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0002718860000072709,
+     "w": 191.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00012523800000963092,
+     "w": 233.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0015385190000074545,
+     "w": 184.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003800638999990724,
+     "w": 188.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.005270982000013191,
+     "w": 183.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.009229259999983697,
+     "w": 183.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.007788517999983924,
+     "w": 183.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8253793103448276,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6899655172413793,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Sparse random s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 3041,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0018121420000056787,
+     "w": 77.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0009313019999979133,
+     "w": 80.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.008143671999988555,
+     "w": 77.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.013748299999974734,
+     "w": 80.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.003617515999991383,
+     "w": 77.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.2850358930000141,
+     "w": 77.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Sparse random s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 3041,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0031051240000010694,
+     "w": 397.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0010887949999869306,
+     "w": 410.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0100285850000148,
+     "w": 397.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.010194460999997546,
+     "w": 417.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0055255340000144315,
+     "w": 396.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.1051792819999946,
+     "w": 396.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Sparse random s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 109,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00019793799998524264,
+     "w": 40.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 9.190599999442384e-05,
+     "w": 66.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0013470120000249608,
+     "w": 39.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003577207999995835,
+     "w": 50.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0005516459999910239,
+     "w": 39.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.008380347000013444,
+     "w": 39.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.007929133999994065,
+     "w": 39.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9710344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8117241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Sparse random s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 109,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0002247150000016518,
+     "w": 204.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0001163340000118751,
+     "w": 279.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0020260670000027403,
+     "w": 193.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003644565000001876,
+     "w": 260.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.03944042399999148,
+     "w": 190.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.008812346999974352,
+     "w": 190.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.013018885999997565,
+     "w": 190.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8253793103448276,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6899655172413793,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Sparse random s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 3051,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.001791690999993989,
+     "w": 78.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0008554020000133278,
+     "w": 80.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0701950750000151,
+     "w": 78.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.009579256000023406,
+     "w": 80.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.006277170000004162,
+     "w": 77.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.2618071339999801,
+     "w": 77.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Sparse random s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 80,
+   "kernel_n": 80,
+   "kernel_m": 3051,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0030558770000084223,
+     "w": 423.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0009072740000135582,
+     "w": 433.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.009999571999998125,
+     "w": 423.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.010313709000001836,
+     "w": 442.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.004717338999995491,
+     "w": 423.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.13490090199999827,
+     "w": 423.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Hub-heavy network s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00032627299998466697,
+     "w": 52.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00014498199999479766,
+     "w": 92.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.001372750000001588,
+     "w": 50.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003893521999998484,
+     "w": 50.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0006543110000052366,
+     "w": 50.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.01905396200001519,
+     "w": 50.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.0065654370000061135,
+     "w": 50.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9595667870036102,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8642241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Hub-heavy network s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0003924030000064249,
+     "w": 256.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00017900600002462852,
+     "w": 384.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.001890553999999156,
+     "w": 252.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0038039879999871573,
+     "w": 252.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.03068122700000231,
+     "w": 252.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.020731737999994948,
+     "w": 252.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.006521773000002895,
+     "w": 252.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8156317689530687,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.7345905172413792,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Hub-heavy network s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6904,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.007073612999988654,
+     "w": 117.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0035849059999861765,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.030952753000008215,
+     "w": 117.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.028932949999983748,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.008129231999987496,
+     "w": 117.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.8302300009999897,
+     "w": 117.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Hub-heavy network s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6904,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.01101211399998192,
+     "w": 618.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.003805653000000575,
+     "w": 627.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.03501746599999933,
+     "w": 618.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.027730814000022974,
+     "w": 637.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.031031358000007003,
+     "w": 615.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.34851012900000455,
+     "w": 615.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Hub-heavy network s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00035239000001752174,
+     "w": 52.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00014869299999986652,
+     "w": 84.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0018693289999873741,
+     "w": 51.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003817398000023786,
+     "w": 51.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0006930769999939912,
+     "w": 51.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.028845453000002408,
+     "w": 51.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.006591120999985378,
+     "w": 51.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9595667870036102,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8642241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Hub-heavy network s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00042444799998975213,
+     "w": 281.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00017297100001201215,
+     "w": 367.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.002441991000011967,
+     "w": 265.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003947686000003614,
+     "w": 265.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.06009891100001141,
+     "w": 265.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.05125402499999154,
+     "w": 265.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.010857541000007132,
+     "w": 265.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8156317689530687,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.7345905172413792,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Hub-heavy network s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6904,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004332921000013812,
+     "w": 118.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0020511680000083743,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.018959856999998692,
+     "w": 118.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.025051110000021026,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.07388307799999438,
+     "w": 117.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.7109072750000109,
+     "w": 117.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Hub-heavy network s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6904,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.007233041000006324,
+     "w": 633.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0022541049999915685,
+     "w": 651.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.023289603000023362,
+     "w": 633.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.021503997999985813,
+     "w": 661.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.010782390000002806,
+     "w": 633.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.31463657500000863,
+     "w": 633.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Small world s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 300,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00041045500000791435,
+     "w": 75.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00015685399998233152,
+     "w": 86.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0017623909999997522,
+     "w": 75.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004011981000019205,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.02593044099998565,
+     "w": 73.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.1688526850000187,
+     "w": 73.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.6392156862745098,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.628921568627451,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Small world s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 300,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.000821524999992107,
+     "w": 366.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0003402150000226811,
+     "w": 437.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.005452091999984532,
+     "w": 366.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004963535999991109,
+     "w": 534.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.04867116599999122,
+     "w": 345.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.053667144000002054,
+     "w": 345.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.5433333333333332,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.5345833333333333,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Small world s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4650,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.005923409000018864,
+     "w": 96.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0031106959999931405,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.024517609000014318,
+     "w": 96.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.023280439000018305,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.015717260999991822,
+     "w": 96.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.5418103049999843,
+     "w": 96.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Small world s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4650,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004699344000016481,
+     "w": 499.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00149793299999601,
+     "w": 523.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.01483114199999136,
+     "w": 499.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.014528357999978425,
+     "w": 529.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.009743597000010595,
+     "w": 493.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.4556025580000096,
+     "w": 493.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Small world s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 300,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00037532999999712047,
+     "w": 76.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0001546950000204106,
+     "w": 92.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0017723759999910271,
+     "w": 76.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003930609999997614,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.03290171300000111,
+     "w": 73.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.06690288299998315,
+     "w": 73.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.6392156862745098,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.628921568627451,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Small world s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 300,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0004890870000053837,
+     "w": 371.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0001913129999877583,
+     "w": 456.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0034480479999956515,
+     "w": 371.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004056773999991492,
+     "w": 559.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.06455947899999614,
+     "w": 363.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.04111771200001613,
+     "w": 363.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.5433333333333332,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.5345833333333333,
+    "tree": "td_dp",
+    "ehm": "td_dp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Small world s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4650,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0028740369999979976,
+     "w": 96.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0014963600000044153,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.016121236999993016,
+     "w": 96.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.015011864999991076,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.007577103000016905,
+     "w": 96.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.7037817780000069,
+     "w": 96.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Small world s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4650,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.006514426999984835,
+     "w": 531.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0014988030000040453,
+     "w": 551.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.016669414999995524,
+     "w": 531.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.016893923999987237,
+     "w": 558.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.022195804000006092,
+     "w": 523.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.5283720129999949,
+     "w": 523.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Geometric clusters s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 279,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0005445270000166147,
+     "w": 65.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0002293950000193945,
+     "w": 78.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.002437447000005477,
+     "w": 65.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004415240999975367,
+     "w": 89.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.02906094799999437,
+     "w": 64.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.02295900300001108,
+     "w": 64.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.05449920699999211,
+     "w": 64.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.6392156862745098,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.628921568627451,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Geometric clusters s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 279,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0004308629999911773,
+     "w": 303.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00019414700000197627,
+     "w": 373.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00307107500000825,
+     "w": 303.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.005880058999991888,
+     "w": 462.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.01766627300000323,
+     "w": 296.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.03400876199998493,
+     "w": 296.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.5433333333333332,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.5345833333333333,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Geometric clusters s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 3726,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00401468699999441,
+     "w": 83.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0019297700000038276,
+     "w": 90.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.017377809999999272,
+     "w": 83.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.01662593499997911,
+     "w": 90.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0046134520000009616,
+     "w": 83.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.46772468899999353,
+     "w": 83.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Geometric clusters s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 3726,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004001311000024543,
+     "w": 473.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0011705130000052577,
+     "w": 493.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.01250337099997978,
+     "w": 473.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.011415977000012845,
+     "w": 503.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.009926158000013174,
+     "w": 451.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.31580890400002204,
+     "w": 451.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Geometric clusters s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 312,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00041439599999648635,
+     "w": 67.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0001724560000013753,
+     "w": 84.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0016076089999899068,
+     "w": 67.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.00453978599998095,
+     "w": 88.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.09098164600001724,
+     "w": 66.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.020022802999989153,
+     "w": 66.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.027975316999999222,
+     "w": 66.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.6392156862745098,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.628921568627451,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Geometric clusters s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 312,
+   "trivial": false,
+   "winners": {
+    "certified": "td_dp",
+    "optimum": "td_dp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0004830990000073143,
+     "w": 341.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00018433700000741737,
+     "w": 407.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.002826456000008193,
+     "w": 341.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0077892689999998765,
+     "w": 484.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.022554115999980695,
+     "w": 333.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.04201488699999345,
+     "w": 333.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "td_dp",
+    "confidence": 0.5433333333333332,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "td_dp",
+    "confidence": 0.5345833333333333,
+    "tree": "td_dp",
+    "ehm": "bnb",
+    "knn": "td_dp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Geometric clusters s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 3693,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.003596990000005462,
+     "w": 82.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0013351339999871925,
+     "w": 90.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.012282403000000386,
+     "w": 82.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.014738974000010785,
+     "w": 90.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.003133028000007698,
+     "w": 82.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.36736535600002185,
+     "w": 82.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Geometric clusters s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 90,
+   "kernel_n": 90,
+   "kernel_m": 3693,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0038949370000125327,
+     "w": 447.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0011067260000174883,
+     "w": 492.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.012143866999991815,
+     "w": 447.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.011776372000014135,
+     "w": 499.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0047342739999862715,
+     "w": 447.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.4995126560000074,
+     "w": 447.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Wide & clustered s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1107,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0017921109999861073,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0007556669999928545,
+     "w": 116.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.007133287999977256,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.009084351000012703,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.2777154069999881,
+     "w": 104.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.8886363636363637,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.886046511627907,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Wide & clustered s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1107,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.002460960000007617,
+     "w": 525.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0007941629999947963,
+     "w": 602.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.010809556999987535,
+     "w": 525.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.008724177000004829,
+     "w": 633.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.09962454200001503,
+     "w": 518.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.7553409090909091,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.753139534883721,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Wide & clustered s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6033,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0040023760000167385,
+     "w": 107.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0017784190000043054,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.016425207999986924,
+     "w": 107.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.019038558999966426,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.004674560000012207,
+     "w": 107.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 1.0218975349999937,
+     "w": 107.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Wide & clustered s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 6033,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.006182755999986966,
+     "w": 576.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0018901600000162944,
+     "w": 627.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.020288916000026802,
+     "w": 576.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.018861666000020705,
+     "w": 637.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.03794976099999303,
+     "w": 553.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.8288957030000006,
+     "w": 553.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Wide & clustered s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1144,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0012857050000434356,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0004294980000167925,
+     "w": 114.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.004626180999991902,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.006101000000001022,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.23723382200000742,
+     "w": 104.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.8886363636363637,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.886046511627907,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Wide & clustered s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1144,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0014287479999666175,
+     "w": 580.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0004556880000450292,
+     "w": 634.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0073772270000063145,
+     "w": 580.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.006538623999972515,
+     "w": 683.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.20149426200003973,
+     "w": 558.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.7553409090909091,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.753139534883721,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Wide & clustered s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5996,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004218711000021358,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0018411940000078175,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.017657012999961808,
+     "w": 106.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.018263509000007616,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.005056072000002132,
+     "w": 105.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.8350200309999991,
+     "w": 105.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Wide & clustered s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5996,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.006547803999978896,
+     "w": 587.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00202096900000015,
+     "w": 651.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.022488844999998037,
+     "w": 587.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.018943330000013248,
+     "w": 661.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0209184849999815,
+     "w": 573.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 1.209382804000029,
+     "w": 573.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Communities s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 528,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.000579714000025433,
+     "w": 78.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00023974499998757892,
+     "w": 92.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0027889109999819084,
+     "w": 78.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004770040000039444,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.9630761779999943,
+     "w": 74.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 1.8065028219999704,
+     "w": 74.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.58038405100001,
+     "w": 74.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.8886363636363637,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.886046511627907,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Communities s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 528,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0007101319999947009,
+     "w": 399.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0002594970000018293,
+     "w": 444.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0039008319999993546,
+     "w": 399.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004563135000012153,
+     "w": 534.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 2.1924856139999633,
+     "w": 368.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.15875697299998137,
+     "w": 368.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.7553409090909091,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.753139534883721,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "ilp",
+    "ood": false
+   }
+  },
+  {
+   "name": "Communities s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4422,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0029054299999984323,
+     "w": 95.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.001364373000001251,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.012154067000039959,
+     "w": 95.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.012892596000028789,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.029854095000018788,
+     "w": 94.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.5968347849999986,
+     "w": 94.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Communities s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4422,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0044670770000152515,
+     "w": 489.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0014037270000244462,
+     "w": 523.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.013942233000022952,
+     "w": 489.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.013779485000043223,
+     "w": 529.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.02194008099996836,
+     "w": 485.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.4264549430000102,
+     "w": 485.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Communities s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 539,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0008619779999889943,
+     "w": 75.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0003657819999602907,
+     "w": 94.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00393988499996567,
+     "w": 75.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0069859660000020085,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 1.0151452690000156,
+     "w": 74.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.28201105399995186,
+     "w": 74.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.6719696969696969,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.6693798449612403,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Communities s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 539,
+   "trivial": false,
+   "winners": {
+    "certified": "ilp",
+    "optimum": "ilp"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0007151710000243838,
+     "w": 403.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0002591819999793188,
+     "w": 499.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.004724785999997039,
+     "w": 403.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.006154144999982236,
+     "w": 559.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.17546256999997922,
+     "w": 387.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "ilp",
+    "confidence": 0.5711742424242423,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "ilp",
+    "confidence": 0.5689728682170542,
+    "tree": "ilp",
+    "ehm": "ilp",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Communities s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4411,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.005273480999960611,
+     "w": 94.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0026507850000143662,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.02163477999999941,
+     "w": 94.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.023991109000007782,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.03418643800000609,
+     "w": 94.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.7093847520000054,
+     "w": 94.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Communities s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4411,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00830108999997492,
+     "w": 539.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.002585895999970944,
+     "w": 551.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.026441956000041955,
+     "w": 539.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.02174519400000463,
+     "w": 558.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.08731141399999842,
+     "w": 511.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.5225914829999851,
+     "w": 511.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00032552300001498224,
+     "w": 55.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00014157399999703557,
+     "w": 84.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0007036750000111169,
+     "w": 48.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.00441338499996391,
+     "w": 48.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0026504600000407663,
+     "w": 48.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.0070970130000205245,
+     "w": 48.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "nt_flow",
+    "confidence": 0.754367816091954,
+    "tree": "bnb",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "nt_flow",
+    "confidence": 0.5950574712643678,
+    "tree": "bnb",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 236,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0006923749999714346,
+     "w": 262.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00030530999998745756,
+     "w": 375.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0021417549999682706,
+     "w": 242.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.006247189000021081,
+     "w": 242.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.10371788600002674,
+     "w": 242.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.01087975699999788,
+     "w": 242.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "nt_flow",
+    "confidence": 0.6412126436781609,
+    "tree": "bnb",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "nt_flow",
+    "confidence": 0.5057988505747126,
+    "tree": "bnb",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4714,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0031730680000237044,
+     "w": 98.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0014782599999989543,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.013415663000046152,
+     "w": 98.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.014106541999979072,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.02742050400001972,
+     "w": 98.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.8278397700000255,
+     "w": 98.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4714,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004770547000020997,
+     "w": 509.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0014113969999698384,
+     "w": 523.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.015818816000034985,
+     "w": 509.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.014097779000053379,
+     "w": 529.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.021492398000020785,
+     "w": 509.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.3089101240000218,
+     "w": 509.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 258,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0004118489999882513,
+     "w": 58.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00015056600000207254,
+     "w": 88.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.0007887390000291816,
+     "w": 49.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0041197429999897395,
+     "w": 49.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.011041493999982777,
+     "w": 49.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.007004603000041243,
+     "w": 49.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "nt_flow",
+    "confidence": 0.9283132530120481,
+    "tree": "nt_flow",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "nt_flow",
+    "confidence": 0.9083333333333334,
+    "tree": "nt_flow",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 258,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "nt_flow"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00040472099999533384,
+     "w": 284.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.00017597099997601617,
+     "w": 396.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.001280604999976731,
+     "w": 256.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004711971999995512,
+     "w": 256.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.09943239000000403,
+     "w": 256.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.007833112000014353,
+     "w": 256.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "nt_flow",
+    "confidence": 0.7890662650602409,
+    "tree": "nt_flow",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "nt_flow",
+    "confidence": 0.7720833333333335,
+    "tree": "nt_flow",
+    "ehm": "nt_flow",
+    "knn": "nt_flow",
+    "ood": false
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4692,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.003059087999986332,
+     "w": 98.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0015292399999680129,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.08806805700004361,
+     "w": 98.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.013613172000020768,
+     "w": 100.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.02776399900000115,
+     "w": 98.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.8244839430000184,
+     "w": 98.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Two-tier (bipartite) s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 100,
+   "kernel_n": 100,
+   "kernel_m": 4692,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.004808691999983239,
+     "w": 538.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0015208529999881648,
+     "w": 551.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.01677295999996886,
+     "w": 538.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.014922778000027392,
+     "w": 558.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.027092839000033564,
+     "w": 538.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.31953135600002724,
+     "w": 538.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Dense & hard s11",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1777,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0019542480000040996,
+     "w": 104.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0009495730000139702,
+     "w": 116.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00830465000001368,
+     "w": 104.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.00986323900002617,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 1.7454111360000297,
+     "w": 102.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9595667870036102,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8642241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Dense & hard s11",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1777,
+   "trivial": false,
+   "winners": {
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0021082050000131858,
+     "w": 510.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0005978499999628184,
+     "w": 599.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.008151608999980908,
+     "w": 510.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.008155289000001176,
+     "w": 633.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8156317689530687,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.7345905172413792,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Dense & hard s11",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5363,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.007366452000042045,
+     "w": 116.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.003439178999997239,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.01875106800002868,
+     "w": 116.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.017545020000000022,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.05547158900003524,
+     "w": 114.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Dense & hard s11",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5363,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.005879902999993192,
+     "w": 607.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.001665389999971012,
+     "w": 617.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.019007074999990436,
+     "w": 607.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.016660478000005696,
+     "w": 637.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.10182200299999522,
+     "w": 594.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Dense & hard s12",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1759,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.0015194210000117891,
+     "w": 105.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0005024829999911162,
+     "w": 118.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.006774366999991344,
+     "w": 105.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.010006524999994326,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 1.4766658899999925,
+     "w": 101.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9595667870036102,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8642241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Dense & hard s12",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 1759,
+   "trivial": false,
+   "winners": {
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.002068194000003132,
+     "w": 579.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0005927739999833648,
+     "w": 637.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.007735828000022593,
+     "w": 579.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.008137807000025532,
+     "w": 683.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.8156317689530687,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.7345905172413792,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Dense & hard s12",
+   "kind": "clique",
+   "weighted": false,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5381,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.00709759699998358,
+     "w": 115.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0032710259999930713,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.028054137000026458,
+     "w": 115.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.02343826200001331,
+     "w": 120.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.07232289300003458,
+     "w": 114.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Dense & hard s12",
+   "kind": "clique",
+   "weighted": true,
+   "n": 120,
+   "kernel_n": 120,
+   "kernel_m": 5381,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 0.005510930000014014,
+     "w": 622.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 0.0016887080000174137,
+     "w": 651.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.017824051999980384,
+     "w": 622.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.01563059800002975,
+     "w": 661.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.09974463600002537,
+     "w": 618.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "timeout",
+     "t": 3.0
+    },
+    {
+     "alg": "ilp",
+     "status": "timeout",
+     "t": 3.0
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6117238267148014,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.5509428879310344,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Network monitoring",
+   "kind": "vertex_cover",
+   "weighted": false,
+   "n": 20,
+   "kernel_n": 20,
+   "kernel_m": 29,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 7.622600003287516e-05,
+     "w": 11.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 7.250099997690995e-05,
+     "w": 16.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00037021700001105273,
+     "w": 11.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.003128472000014426,
+     "w": 17.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00010846899999705784,
+     "w": 10.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.0016562220000082561,
+     "w": 10.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.008537295999985872,
+     "w": 10.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.9710344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.8117241379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": false
+   }
+  },
+  {
+   "name": "Security patch plan",
+   "kind": "vertex_cover",
+   "weighted": true,
+   "n": 16,
+   "kernel_n": 11,
+   "kernel_m": 10,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 7.680199996684678e-05,
+     "w": 12.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 5.665900005169533e-05,
+     "w": 18.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00022056199998132797,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.004241870000043946,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00013171699998792974,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.0013681389999646854,
+     "w": 12.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.013768795000032696,
+     "w": 12.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.6190344827586207,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.3793491379310345,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "greedy",
+    "ood": true
+   }
+  },
+  {
+   "name": "Exam timetable slot",
+   "kind": "independent_set",
+   "weighted": false,
+   "n": 16,
+   "kernel_n": 16,
+   "kernel_m": 25,
+   "trivial": false,
+   "winners": {
+    "certified": "bnb",
+    "optimum": "bnb"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 8.599000000231172e-05,
+     "w": 10.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 5.449000002499815e-05,
+     "w": 14.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 0.00044232599998395017,
+     "w": 10.0,
+     "proved": false
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0030721960000050785,
+     "w": 16.0,
+     "proved": false
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.0003372110000441353,
+     "w": 9.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.00211502100000871,
+     "w": 9.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.010175214000014421,
+     "w": 9.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.7196750902527076,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.6481681034482758,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  },
+  {
+   "name": "Team builder",
+   "kind": "clique",
+   "weighted": true,
+   "n": 16,
+   "kernel_n": 6,
+   "kernel_m": 6,
+   "trivial": false,
+   "winners": {
+    "certified": "nt_flow",
+    "optimum": "greedy"
+   },
+   "res": [
+    {
+     "alg": "greedy",
+     "status": "ok",
+     "t": 4.302799999322815e-05,
+     "w": 7.0,
+     "proved": false
+    },
+    {
+     "alg": "matching",
+     "status": "ok",
+     "t": 2.862000002323839e-05,
+     "w": 14.0,
+     "proved": false
+    },
+    {
+     "alg": "nt_flow",
+     "status": "ok",
+     "t": 6.453800000372212e-05,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "lp_round",
+     "status": "ok",
+     "t": 0.0029454470000018773,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "bnb",
+     "status": "ok",
+     "t": 0.00010329100001627012,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "td_dp",
+     "status": "ok",
+     "t": 0.000615075999974124,
+     "w": 7.0,
+     "proved": true
+    },
+    {
+     "alg": "ilp",
+     "status": "ok",
+     "t": 0.001510152999969705,
+     "w": 7.0,
+     "proved": true
+    }
+   ],
+   "certified": {
+    "consensus": "bnb",
+    "confidence": 0.56684375,
+    "tree": "bnb",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   },
+   "optimum": {
+    "consensus": "bnb",
+    "confidence": 0.4766843220338983,
+    "tree": "greedy",
+    "ehm": "bnb",
+    "knn": "bnb",
+    "ood": true
+   }
+  }
+ ],
+ "trivial": 0
+}
